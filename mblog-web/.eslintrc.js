@@ -19,6 +19,7 @@ module.exports = {
     'comma-dangle': 'off',
     'semi': 'off',
     'space-before-blocks': 'off',
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'arrow-body-style': ["error", "as-needed"],
   },
 };

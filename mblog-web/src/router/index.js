@@ -21,4 +21,11 @@ const router = createRouter({
   routes,
 });
 
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  // 检测用户是否已登录
+  // console.log(to, from);
+  next();
+});
+
 export default router;
