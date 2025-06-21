@@ -21,5 +21,6 @@ module.exports = {
     'space-before-blocks': 'off',
     'no-unused-vars': 'off',
     'arrow-body-style': ["error", "as-needed"],
+    'no-unused-vars': 'off'
   },
 };
