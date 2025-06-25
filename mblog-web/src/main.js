@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 // 添加 elementUI
 import ELmenetPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+// 注册所有elementplus图标
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 添加App
 import App from './App.vue';
 // 添加路由管理器

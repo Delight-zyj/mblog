@@ -1,5 +1,12 @@
 <template>
-    <el-button>我是ELement</el-button>
+   <router-link to="/login">
+    <el-button>
+        我是ELement
+    </el-button>
+   </router-link>
+     <el-icon>
+          <Lock />
+        </el-icon>
 </template>
 
 <script>
