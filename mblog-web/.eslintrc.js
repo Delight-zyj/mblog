@@ -11,16 +11,17 @@ module.exports = {
     parser: '@babel/eslint-parser',
   },
   rules: {
-    'indent': 'off',
+    indent: 'off',
+    semi: 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'linebreak-style': ['off'],
     'vue/multi-word-component-names': 'off',
     'comma-dangle': 'off',
-    'semi': 'off',
     'space-before-blocks': 'off',
     'no-unused-vars': 'off',
     'arrow-body-style': 'off',
-    'max-len': ['error', { code: 300 }]
+    'max-len': ['error', { code: 300 }],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
   },
 };
