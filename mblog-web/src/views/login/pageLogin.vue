@@ -108,8 +108,8 @@ const clear = () => { loginForm.value = { username: '', password: '' } }
   /* padding: 0 15px; */
 }
 
-::v-deep(.input-i) {
-  border-radius: 100px;
+.el-input:deep( .el-input__wrapper) {
+  border-radius: 25px;
   background-color: #fff;
   outline: none;
   border: 0;
