@@ -2,12 +2,16 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/home/home.vue';
 import pageLogin from '../views/login/pageLogin.vue';
 import notFind from '../views/404/404.vue';
+import create from '../views/create/create.vue';
+import change from '../views/change/change.vue';
 
 const routes = [
-  { path: '/', name: 'login', component: pageLogin, },
+  { path: '/login', name: 'login', component: pageLogin, },
   { path: '/home', name: 'home', component: HomeView, },
   { path: '/notFind', name: 'notFind', component: notFind, },
-  { path: '/:pathMatch(.*)*', redirect: '/notFind' }
+  { path: '/:pathMatch(.*)*', redirect: '/notFind' },
+  { path: '/create', name: 'create', component: create, },
+  { path: '/change', name: 'change', component: change, },
 ];
 
 const router = createRouter({
