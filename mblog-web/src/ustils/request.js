@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import router from '../router'
 
+// 创建axios实例对象
 const request = axios.create({
     // baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
     baseURL: '/api',
@@ -13,14 +14,22 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         // 请求前拦截
+        console.log('config', config);
+        const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+        if (loginUser && loginUser.token) {
+            config.headers.token = loginUser.token;
+        }
+        console.log('config', config);
+        return config;
     },
     (error) => {
         console.log(error);
-        Promise.reject(error)
+        // Promise.reject(error)
+        return Promise.reject(error)
     }
 );
 
-// 响应拦截器
+// axios的响应 response 拦截器
 request.interceptors.response.use(
     (response) => {
         // 响应成功拦截

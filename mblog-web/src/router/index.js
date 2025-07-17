@@ -6,6 +6,10 @@ import create from '../views/create/create.vue';
 import change from '../views/change/change.vue';
 
 const routes = [
+   {
+    path: '/',
+    redirect: '/home' // 当访问根路径时重定向到/home
+  },
   { path: '/login', name: 'login', component: pageLogin, },
   { path: '/home', name: 'home', component: HomeView, },
   { path: '/notFind', name: 'notFind', component: notFind, },

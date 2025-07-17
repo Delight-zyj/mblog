@@ -22,6 +22,18 @@ module.exports = {
     'no-unused-vars': 'off',
     'arrow-body-style': 'off',
     'max-len': ['error', { code: 300 }],
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": "true",
+        "ignorePropertyModificationsFor": [
+          "state", // for vuex state
+          "acc", // for reduce accumulators
+          "e", // for e.returnvalue
+          "config" // for axios config
+        ]
+      }
+    ]
   },
 };
