@@ -5,10 +5,10 @@
       <div>
         <el-form-item prop="username">
           <!-- <el-icon size="37"><UserFilled color="#fff" /></el-icon> -->
-          <el-input class="input-i" v-model="loginForm.username" type="text" placeholder="用户名"
+          <el-input class="input-i" type="text" v-model="loginForm.username" placeholder="用户名"
             :prefix-icon="UserFilled" />
         </el-form-item>&nbsp;
-        <el-form-item label="" prop="password">
+        <el-form-item prop="password">
           <el-input class="input-i" type="password" v-model="loginForm.password" placeholder="密码" :prefix-icon="Lock" />
         </el-form-item>
       </div>&nbsp;
@@ -74,7 +74,7 @@ import { ElMessage } from 'element-plus';
 
 import { loginApi } from '../api/login'
 
-const loginForm = ref({ username: '', password: '' })
+const loginForm = ref({ username: '' , password: '' })
 const router = useRouter()
 
 const value2 = ref(true)

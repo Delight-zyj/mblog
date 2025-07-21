@@ -4,6 +4,8 @@ import pageLogin from '../views/login/pageLogin.vue';
 import notFind from '../views/404/404.vue';
 import create from '../views/create/create.vue';
 import change from '../views/change/change.vue';
+import blog from '../views/blog/blog.vue';
+import author from '../views/author/author.vue';
 
 const routes = [
    {
@@ -16,10 +18,12 @@ const routes = [
   { path: '/:pathMatch(.*)*', redirect: '/notFind' },
   { path: '/create', name: 'create', component: create, },
   { path: '/change', name: 'change', component: change, },
+  { path: '/blog', name: 'blog', component: blog, },
+  { path: '/author', name: 'author', component: author, },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
 });
 

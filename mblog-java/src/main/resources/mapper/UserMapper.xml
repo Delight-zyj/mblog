@@ -6,4 +6,7 @@
     <select id="selecList">
         select * from user
     </select>
+    <select id="selectUsernameAndPasswordById" resultType="com.mblog.entry.LoginInfo">
+        select * from t_user where u_user_name=#{username} and u_password = #{password}
+    </select>
 </mapper>

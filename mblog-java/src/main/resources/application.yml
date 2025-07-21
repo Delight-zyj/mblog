@@ -3,7 +3,8 @@ spring:
     name: mblog-java
 # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/mblog?useSSL=false&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/mblog?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/mblog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 123qwe
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -22,7 +23,7 @@ spring:
 #        format_sql: true
 # 端口配置
 server:
-  port: 8081
+  port: 8080
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
 #  configuration:
