@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@Slf4j
+@Slf4j
 @RequestMapping("/login")
 @RestController
 public class LoginController {
@@ -22,7 +22,7 @@ public class LoginController {
 
     @PostMapping
     public Result login(@RequestBody User user) {
-//        log.info("登录:{}", user);
+        log.info("登录:{}", user);
         LoginInfo loginInfo = userService.selectUsernameAndPasswordById(user);
         if (loginInfo != null) {
             return Result.success(loginInfo);
