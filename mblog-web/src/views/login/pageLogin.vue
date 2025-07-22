@@ -18,8 +18,9 @@
         &nbsp;
       </el-form-item>
 
-      <el-switch v-model="value2" class="ml-2"
+      <el-switch v-model="rememberMe" class="ml-2"
         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;" />
+        <!-- <el-checkbox v-model="rememberMe" style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;">记住密码</el-checkbox> -->
       <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住密码</span>
       <!-- <span style="font-size: 13px; padding-top: 2px; padding-left: 110px; color: #fff;">忘记密码</span> -->
       <router-link to="/change">
@@ -77,18 +78,31 @@ import { loginApi } from '../api/login'
 const loginForm = ref({ username: '' , password: '' })
 const router = useRouter()
 
-const value2 = ref(true)
+// 记住密码状态
+const rememberMe = ref(true)
 
 const centerDialogVisible = ref(false)
 
+
+
 // 登录
 const login = async () => {
+  if (!loginForm.value.username || !loginForm.value.password) {
+  ElMessage.error('用户名或密码不能为空');
+  return;
+}
   const result = await loginApi(loginForm.value);
   if (result.code) { // 成功
     // 1、提示信息：登录成功
     ElMessage.success('登录成功');
     // 2、 存储当前员工登录信息
     localStorage.setItem('loginUser', JSON.stringify(result.data))
+     // 保存记住的密码
+      if (rememberMe.value) {
+        localStorage.setItem('rememberedUser', JSON.stringify(loginForm.value))
+      } else {
+        localStorage.removeItem('rememberedUser')
+      }
     // 3、跳转首页
     router.push('/')
   } else { // 失败
@@ -98,6 +112,7 @@ const login = async () => {
 
 // 重置
 const clear = () => { loginForm.value = { username: '', password: '' } }
+
 
 </script>
 <style scoped>

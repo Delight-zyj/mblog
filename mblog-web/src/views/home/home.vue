@@ -13,11 +13,23 @@
         <router-link to="/" class="nav-link">博客</router-link>
       </nav>
 
-      <!-- 控制按钮 -->
+      <!-- 深色模式控制按钮 -->
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
-      <button class="avatar">
+      
+      <div class="operate">
+        <button class="avatar">
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
       </button>
+
+      <a class="loginname">
+        {{ loginName }}
+      </a>
+
+       <a href="javascript:;" @click="logout" class="quit">
+           {{ loginName ? '退出登录' : '去登录' }} 
+          </a>
+      </div>
+      
     </div>
 
     <div class="block text-center">
@@ -58,6 +70,7 @@
 <script setup>
 // import { ElButton } from 'element-plus'
 import { ref, onMounted, h } from 'vue'
+import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
 import {
   ElMessage,
@@ -67,11 +80,14 @@ import {
   ElCarouselItem,
   ElNotification
 } from 'element-plus'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // import {
 //   SelectAllBlog,
 //   fetchCarouselImages
 // } from '../api/home'
+
+
 
 import one from '@/assets/1.png'
 import two from '@/assets/2.png'
@@ -99,12 +115,49 @@ const open1 = () => {
   })
 }
 
+const loginName = ref('');
+const router = useRouter();
+// 钩子函数(获取用户名信息)
+onMounted(() => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  if (loginUser && loginUser.username) {
+    loginName.value = loginUser.username;
+  }
+})
+
+// 退出登录
+const logout = async () => {
+   if (!loginName.value) {
+    // 未登录，直接跳转登录页
+    router.push('/login');
+    return;
+  }
+   // 已登录，弹出确认框
+  ElMessageBox.confirm('确认退出登录吗?', '提示',
+    { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }
+  ).then(async () => {
+    ElMessage.success('退出成功');
+    // 移除token信息
+    localStorage.removeItem('loginUser');
+    // 跳转页面
+    router.push('/login');
+  }).catch(() => {
+    ElMessage.info({
+    message: '您已取消退出'
+});
+  })
+}
+
 // 页面加载时触发
 onMounted(() => {
   open1()
 })
+
+
 </script>
 <style scoped>
+
+
 .home {
   min-height: 1000vh;
   background-color: #ffffff;
@@ -132,6 +185,7 @@ onMounted(() => {
   padding: 20px;
   border-radius: 10px 10px 0 0;
   border: 1px solid #656363;
+  backdrop-filter: blur(5px);
 }
 
 .dark-mode .container {
@@ -157,7 +211,7 @@ onMounted(() => {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 18%;
-  left: 60%;
+  left: 50%;
 }
 
 .dark-mode .nav {
@@ -200,7 +254,7 @@ onMounted(() => {
 .change {
   position: absolute;
   top: 24%;
-  right: 9.5%;
+  right: 19.5%;
   width: 150px;
   height: 44px;
   border-radius: 10px;
@@ -208,11 +262,66 @@ onMounted(() => {
 
 .avatar {
   position: absolute;
-  top: 24%;
-  right: 5%;
+  top: 13%;
+  left: 5%;
   width: 44px;
   height: 44px;
   border-radius: 50%;
+}
+
+.loginname{
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  width: 100px;
+  transition: all 0.5s ease;
+
+}
+.dark-mode .loginname {
+  color: #ffffff;
+}
+
+
+.quit{
+  position: absolute;
+  top: 50%;
+  right: 11.5%;
+  text-decoration: none;
+  color: #000000;
+  /* background-color: #ffffff !important; */
+  transition: all 0.5s ease;
+  width: 85px ;
+  height: 30px;
+  border-radius: 10px;
+  line-height: 30px;
+  text-align: center;
+}
+.dark-mode .quit {
+  color: #ffffff;
+  /* background-color: #000000; */
+}
+.quit:hover{
+  color: rgb(0, 0, 0) !important; /* 选中文字颜色 */
+  background-color: #ff0000 !important; /* 可选：背景色 */
+  border-radius: 10px;
+  font-weight: bold;
+  transition: all 0.5s ease;
+}
+
+.operate{
+  position: absolute;
+  top: 14%;
+  right: 3.5%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  height: 60px;
+  width: 170px;
+  border: 1px solid #d6d6d6;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.dark-mode .operate{
+  background-color: #000000;
+  border: 1px solid #333;
 }
 
 .demonstration {
