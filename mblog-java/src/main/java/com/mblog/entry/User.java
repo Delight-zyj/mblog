@@ -15,7 +15,7 @@ public class User {
     /**
      * 用户类，用于表示系统中的用户信息
      */
-    private Long id; // 用户唯一标识符
+    private Long userId; // 用户唯一标识符
     private String username; // 用户名
     private String password; // 用户密码，用于账户安全
     private String gender; // 用户性别
@@ -33,8 +33,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + username + '\'' +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
                 ", email='" + email + '\'' +
@@ -49,14 +49,4 @@ public class User {
                 '}';
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", age=" + age +
-//                ", email='" + email + '\'' +
-//
-//                '}';
-//    }
 }

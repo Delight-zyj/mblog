@@ -19,6 +19,8 @@
       <div class="operate">
         <button class="avatar">
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+        <!-- <el-avatar src={{ avatar }} /> -->
+        
       </button>
 
       <a class="loginname">
@@ -92,6 +94,19 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import one from '@/assets/1.png'
 import two from '@/assets/2.png'
 import three from '@/assets/3.png'
+import four from '@/assets/4.png'
+import five from '@/assets/5.png'
+import six from '@/assets/6.png'
+import seven from '@/assets/7.png'
+import eight from '@/assets/8.png'
+import nine from '@/assets/9.png'
+import ten from '@/assets/10.png'
+import eleven from '@/assets/11.png'
+import twelve from '@/assets/12.png'
+import thirteen from '@/assets/13.png'
+import fourteen from '@/assets/14.png'
+import fifteen from '@/assets/15.png'
+
 
 import {
   darkMode,
@@ -101,7 +116,20 @@ import {
 const carouselImages = ref([
   { src: one, alt: '轮播图1' },
   { src: two, alt: '轮播图2' },
-  { src: three, alt: '轮播图3' }
+  { src: three, alt: '轮播图3' },
+  { src: four, alt: '轮播图4' },
+  { src: five, alt: '轮播图5' },
+  { src: six, alt: '轮播图6' },
+  { src: seven, alt: '轮播图7' },
+  { src: eight, alt: '轮播图8' },
+  { src: nine, alt: '轮播图9' },
+  { src: ten, alt: '轮播图10' },
+  { src: eleven, alt: '轮播图11' },
+  { src: twelve, alt: '轮播图12' },
+  { src: thirteen, alt: '轮播图13' },
+  { src: fourteen, alt: '轮播图14' },
+  { src: fifteen, alt: '轮播图15' }
+
 ])
 
 // 弹窗函数
@@ -164,10 +192,12 @@ onMounted(() => {
   border-radius: 10px;
   margin: 5px;
   border: 1px solid #656363;
+  transition: all 0.5s ease;
 }
 
 .dark-mode .home {
   background-color: #000000;
+  transition: all 0.5s ease;
 }
 
 .container {
@@ -186,10 +216,12 @@ onMounted(() => {
   border-radius: 10px 10px 0 0;
   border: 1px solid #656363;
   backdrop-filter: blur(5px);
+  transition: all 0.5s ease;
 }
 
 .dark-mode .container {
   background-color: rgb(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
 }
 
 .logo {
@@ -212,10 +244,12 @@ onMounted(() => {
   position: absolute;
   top: 18%;
   left: 50%;
+  transition: all 0.5s ease;
 }
 
 .dark-mode .nav {
   background-color: rgb(0, 0, 0, 0.7);
+  transition: all 0.5s ease;
 }
 
 .nav-link {
@@ -231,7 +265,7 @@ onMounted(() => {
   min-width: 80px; /* 统一最小宽度，保持对齐 */
   text-align: center; /* 文本居中 */
   line-height: normal; /* 防止line-height影响布局 */
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .nav-link.router-link-active {
@@ -239,15 +273,18 @@ onMounted(() => {
   background-color: #3bbde9 !important; /* 可选：背景色 */
   border-radius: 20px;
   font-weight: bold;
+  transition: all 0.5s ease;
 }
 
 .dark-mode .nav-link {
   color: #e6e6e6;
+  transition: all 0.5s ease;
 }
 
 .nav-link:hover {
   color: cornflowerblue;
   border-radius: 4px;
+  transition: all 0.5s ease;
 }
 
 /* 按钮样式 */
@@ -279,6 +316,7 @@ onMounted(() => {
 }
 .dark-mode .loginname {
   color: #ffffff;
+  transition: all 0.5s ease;
 }
 
 
@@ -298,7 +336,7 @@ onMounted(() => {
 }
 .dark-mode .quit {
   color: #ffffff;
-  /* background-color: #000000; */
+  transition: all 0.5s ease;
 }
 .quit:hover{
   color: rgb(0, 0, 0) !important; /* 选中文字颜色 */
@@ -318,10 +356,12 @@ onMounted(() => {
   width: 170px;
   border: 1px solid #d6d6d6;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
 }
 .dark-mode .operate{
   background-color: #000000;
   border: 1px solid #333;
+  transition: all 0.5s ease;
 }
 
 .demonstration {

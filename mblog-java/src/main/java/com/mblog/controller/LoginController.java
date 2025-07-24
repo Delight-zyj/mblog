@@ -23,10 +23,12 @@ public class LoginController {
     @PostMapping
     public Result login(@RequestBody User user) {
         log.info("登录:{}", user);
-        LoginInfo loginInfo = userService.selectUsernameAndPasswordById(user);
-        if (loginInfo != null) {
-            return Result.success(loginInfo);
-        }
-        return Result.error("用户名或密码错误！");
+        LoginInfo loginInfo = userService.login(user);
+//        if (loginInfo != null) {
+//            return Result.success(loginInfo);
+//        }
+//        return Result.error("用户名或密码错误！");
+
+        return Result.success(loginInfo);
     }
 }

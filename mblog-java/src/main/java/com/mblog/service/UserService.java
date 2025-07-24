@@ -5,5 +5,5 @@ import com.mblog.entry.User;
 
 public interface UserService {
 
-    LoginInfo selectUsernameAndPasswordById(User user);
+    LoginInfo login(User user);
 }

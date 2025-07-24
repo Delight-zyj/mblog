@@ -6,7 +6,10 @@
     <select id="selecList">
         select * from user
     </select>
-    <select id="selectUsernameAndPasswordById" resultType="com.mblog.entry.LoginInfo">
-        select * from t_user where u_user_name=#{username} and u_password = #{password}
+    
+    <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">
+        select u_userid as userId,u_username as username,u_password as password from t_user where u_username= #{username}
+
     </select>
+
 </mapper>

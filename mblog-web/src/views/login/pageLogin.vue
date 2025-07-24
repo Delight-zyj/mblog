@@ -22,7 +22,6 @@
         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;" />
         <!-- <el-checkbox v-model="rememberMe" style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;">记住密码</el-checkbox> -->
       <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住密码</span>
-      <!-- <span style="font-size: 13px; padding-top: 2px; padding-left: 110px; color: #fff;">忘记密码</span> -->
       <router-link to="/change">
         <el-button
           style="font-size: 13px;  border: 0; padding: 2px; margin-left: 110px; background-color:  transparent;">
@@ -30,7 +29,6 @@
         </el-button>
       </router-link>
       <br>
-      <!-- <span style="font-size: 13px; padding-top: 2px; padding-left: 160px; color: #fff;">没有账号？点我注册</span> -->
       <router-link to="/create">
       <el-button style="font-size: 13px;  border: 0; padding: 2px; margin-left: 160px; background-color:  transparent;">
         <span style="color: #fff;">没有账号？点我注册</span>
