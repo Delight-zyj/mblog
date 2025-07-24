@@ -17,7 +17,8 @@
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
       <div class="operate">
         <button class="avatar">
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+        <!-- <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" /> -->
+         <el-avatar :src="avatar ? avatar : one" />
       </button>
 
       <a class="loginname">
@@ -102,6 +103,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // import axios, { Axios } from 'axios';
+import one from '@/assets/1.png'
 import {
   ElMessage,
   ElMessageBox,
@@ -132,12 +134,20 @@ const handleClose = (key, keyPath) => {
 
 
 const loginName = ref('');
+const avatar = ref('');
 const router = useRouter();
 // 钩子函数(获取用户名信息)
 onMounted(() => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   if (loginUser && loginUser.username) {
     loginName.value = loginUser.username;
+  }
+})
+// 获取用户头像
+onMounted(() => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  if (loginUser && loginUser.avatar) {
+    avatar.value = loginUser.avatar;
   }
 })
 

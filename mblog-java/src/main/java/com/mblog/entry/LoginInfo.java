@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginInfo {
 
-    private int id;
+    private Long id;
     private String username;
     private String token;
+    private String avatar;
 
 }
