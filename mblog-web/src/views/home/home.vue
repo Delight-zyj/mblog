@@ -69,11 +69,10 @@
 
 <script setup>
 // import { ElButton } from 'element-plus'
-import { ref, onMounted, h } from 'vue'
+import { ref, onMounted, h  } from 'vue'
 import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
 import loginUser from '@/router/index';
-console.log(localStorage.getItem('logiUser'));
 import {
   ElMessage,
   ElMessageBox,
@@ -173,8 +172,13 @@ const logout = async () => {
     { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }
   ).then(async () => {
     ElMessage.success('退出成功');
-    // 移除token信息
-    // localStorage.removeItem('loginUser');
+    // 检查是否记住密码
+    const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue ') || 'false')
+    
+    if(!rememberMeValue){
+        // 如果没有记住密码，清除登录信息
+        localStorage.removeItem('loginUser');
+    }
     // 跳转页面
     router.push('/login');
   }).catch(() => {
@@ -186,7 +190,9 @@ const logout = async () => {
 
 // 页面加载时触发
 onMounted(() => {
-  open1()
+  if(!loginName.value){
+    open1()
+  }
 })
 
 

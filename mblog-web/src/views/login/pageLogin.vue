@@ -4,7 +4,6 @@
     <el-form ref="formRef" :model="loginForm" :rules="rules" class="input">
       <div>
         <el-form-item prop="username">
-          <!-- <el-icon size="37"><UserFilled color="#fff" /></el-icon> -->
           <el-input class="input-i" type="text" v-model="loginForm.username" placeholder="用户名"
             :prefix-icon="UserFilled" />
         </el-form-item>&nbsp;
@@ -17,14 +16,22 @@
           @click="login">登录</el-button>
         &nbsp;
       </el-form-item>
+      <el-form-item class="loginbutton">
+        <router-link to="/home">
+          <el-button style=" width: 300px; height: 40px; border-radius: 50px; background-color: rgba(255, 255, 255, 0.5)" type="primary"
+          @click="rem"
+          >游客登录</el-button>
+        </router-link>
+        
+        &nbsp;
+      </el-form-item>
 
       <el-switch v-model="rememberMe" class="ml-2"
         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;" />
-        <!-- <el-checkbox v-model="rememberMe" style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;">记住密码</el-checkbox> -->
-      <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住密码</span>
+      <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住用户名</span>
       <router-link to="/change">
         <el-button
-          style="font-size: 13px;  border: 0; padding: 2px; margin-left: 110px; background-color:  transparent;">
+          style="font-size: 13px;  border: 0; padding: 2px; margin-left: 100px; background-color:  transparent;">
           <span style="color: #fff;">忘记密码</span>
         </el-button>
       </router-link>
@@ -66,10 +73,11 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, watch  } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserFilled, Lock, Iphone } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
+import {  onMounted } from 'vue';
 
 import { loginApi } from '../api/login'
 
@@ -77,11 +85,14 @@ const loginForm = ref({ username: '' , password: '' })
 const router = useRouter()
 
 // 记住密码状态
-const rememberMe = ref(true)
+const rememberMe = ref(false)
+
+// 监听 rememberMe 变化并保存到 localStorage
+watch(rememberMe, (newValue) => {
+  localStorage.setItem('rememberMeValue ', JSON.stringify(newValue))
+}, { immediate: true })
 
 const centerDialogVisible = ref(false)
-
-
 
 // 登录
 const login = async () => {
@@ -89,18 +100,12 @@ const login = async () => {
   ElMessage.error('用户名或密码不能为空');
   return;
 }
-  const result = await loginApi(loginForm.value);
+const result = await loginApi(loginForm.value);
   if (result.code) { // 成功
     // 1、提示信息：登录成功
     ElMessage.success('登录成功');
     // 2、 存储当前员工登录信息
     localStorage.setItem('loginUser', JSON.stringify(result.data))
-     // 保存记住的密码
-      if (rememberMe.value) {
-        localStorage.setItem('rememberedUser', JSON.stringify(loginForm.value))
-      } else {
-        localStorage.removeItem('rememberedUser')
-      }
     // 3、跳转首页
     router.push('/')
   } else { // 失败
@@ -108,8 +113,56 @@ const login = async () => {
   }
 }
 
+const rem = async () => {
+  localStorage.removeItem('loginUser');
+}
+// 页面加载时检查 localStorage 中是否有保存的登录信息
+// onMounted(() => {
+//  // 优先检查记住的用户名和密码
+//   const rememberedUser = localStorage.getItem('rememberedUser');
+//   if (rememberMe.value === true) {
+//     const userData = JSON.parse(rememberedUser);
+//     loginForm.value = {
+//       // username: userData.username,
+//       // password: userData.password
+//       username: loginForm.value.username,
+//       password: loginForm.value.password
+//     };
+//   } else {
+//     // 检查是否已登录但没有记住密码
+//     const savedUser = localStorage.getItem('loginUser');
+//     if (savedUser) {
+//       const user = JSON.parse(savedUser);
+//       loginForm.value.username = user.username;
+//       loginForm.value.password = user.password;
+//       // 注意：不设置密码，因为安全原因通常不会存储密码
+//     }
+//   }
+// });
+
+
+onMounted(() => {
+  // 1. 从 localStorage 中读取保存的登录信息
+  const savedUser = localStorage.getItem('loginUser');
+
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      // 自动填充用户名和密码
+      loginForm.value.username = user.username;
+      loginForm.value.password = user.password;
+
+      // 自动勾选“记住密码”
+      rememberMe.value = true;
+    } catch (e) {
+      console.error('解析保存的用户信息失败:', e);
+    }
+  }
+  // 如果没有保存的信息，loginForm 保持为空，无需处理
+});
+
 // 重置
-const clear = () => { loginForm.value = { username: '', password: '' } }
+// const clear = () => { loginForm.value = { username: '', password: '' } }
 
 
 </script>
