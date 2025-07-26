@@ -17,11 +17,13 @@
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
       
       <div class="operate">
+     
+
+      <router-link :to="loginUser ? '/userinfo' : '/login'">
         <button class="avatar">
-        <!-- <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" /> -->
-        <!-- <el-avatar :src="avatar" /> -->
-        <el-avatar :src="avatar ? avatar : one" />
-      </button>
+          <el-avatar :src="avatar ? avatar : one" />
+        </button>
+      </router-link>
 
       <a class="loginname">
         {{ loginName }}
@@ -31,19 +33,15 @@
            {{ loginName ? '退出登录' : '去登录' }} 
           </a>
       </div>
-      
+    </div>
+    <div class="block text-center"> 
+      <h1 class="h1-hello">你好</h1>
     </div>
 
     <div class="block text-center">
-      <!-- <span class="demonstration">Motion blur the switch (default)</span>
-        <el-carousel height="703px" motion-blur>
-        <el-carousel-item v-for="(item, index) in 9" :key="index">
-          <h3 class="small justify-center" text="2xl">{{ item }}</h3>
-          <img :src="item.src" :alt="item.alt" class="carousel-image" />
-        </el-carousel-item>
-      </el-carousel> -->
+    
 
-      <el-carousel :interval="4000" type="card" height="610px" style="margin-top: 102px;">
+      <el-carousel :interval="4000" type="card" height="610px" style="margin-top: 212px;">
     <el-carousel-item v-for="(item,index) in carouselImages" :key="index">
       <!-- <h3 text="2xl" justify="center">{{ item }}</h3> -->
        <img :src="item.src" :alt="item.alt" class="carousel-image" />
@@ -74,6 +72,8 @@
 import { ref, onMounted, h } from 'vue'
 import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
+import loginUser from '@/router/index';
+console.log(localStorage.getItem('logiUser'));
 import {
   ElMessage,
   ElMessageBox,
@@ -120,15 +120,15 @@ const carouselImages = ref([
   { src: four, alt: '轮播图4' },
   { src: five, alt: '轮播图5' },
   { src: six, alt: '轮播图6' },
-  { src: seven, alt: '轮播图7' },
-  { src: eight, alt: '轮播图8' },
-  { src: nine, alt: '轮播图9' },
-  { src: ten, alt: '轮播图10' },
-  { src: eleven, alt: '轮播图11' },
-  { src: twelve, alt: '轮播图12' },
-  { src: thirteen, alt: '轮播图13' },
-  { src: fourteen, alt: '轮播图14' },
-  { src: fifteen, alt: '轮播图15' }
+  // { src: seven, alt: '轮播图7' },
+  // { src: eight, alt: '轮播图8' },
+  // { src: nine, alt: '轮播图9' },
+  // { src: ten, alt: '轮播图10' },
+  // { src: eleven, alt: '轮播图11' },
+  // { src: twelve, alt: '轮播图12' },
+  // { src: thirteen, alt: '轮播图13' },
+  // { src: fourteen, alt: '轮播图14' },
+  // { src: fifteen, alt: '轮播图15' }
 
 ])
 
@@ -174,7 +174,7 @@ const logout = async () => {
   ).then(async () => {
     ElMessage.success('退出成功');
     // 移除token信息
-    localStorage.removeItem('loginUser');
+    // localStorage.removeItem('loginUser');
     // 跳转页面
     router.push('/login');
   }).catch(() => {
@@ -417,6 +417,32 @@ onMounted(() => {
   background-color: #000000;
   color: #ffffff;
   border: #ffffff 1px solid;
+}
+
+.h1-hello{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20vw;
+  font-weight: bold;
+  background: url("@/assets/5.png") no-repeat center/cover;
+  background-clip: text;
+  color: transparent;
+  margin-top: 150px;
+  margin-bottom: 100px;
+  animation: scale 3s ease-in-out ;
+  
+}
+
+@keyframes scale{
+  from{
+    font-size: 755px;
+  }
+  to{
+    font-size: 20vw;
+  }
 }
 
 .blog-title{
