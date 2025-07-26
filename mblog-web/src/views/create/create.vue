@@ -3,11 +3,47 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserFilled, Lock, Message } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { createApi } from '/src/views/api/create.js'
 
-const createForm = ref({ username: '', password: '', email: '' });
+
+const createForm = ref({ username: '', password1: '', password2:'', email: '' });
 
 const router = useRouter()
-const value2 = ref({})
+
+const create = async () => {
+  if (!createForm.value.username) {
+  ElMessage.error('用户名不能为空');
+  return;
+  }
+  if(!createForm.value.password1){
+    ElMessage.error('密码不能为空');
+    return;
+  }
+  if(!createForm.value.password2){
+    ElMessage.error('确认密码不能为空');
+    return;
+  }
+  if(createForm.value.password1 !== createForm.value.password2){
+    ElMessage.error('两次密码输入不一致');
+    return;
+  }
+  if(!createForm.value.email){
+    ElMessage.error('邮箱不能为空');
+    return;
+  }
+  
+  const result = await createApi(createForm.value);
+  if(result.code){
+    ElMessage.success('注册成功');
+    localStorage.setItem('createUser', JSON.stringify(result.data));
+  }else{
+    ElMessage.error(result.msg);
+  }
+}
+
+
+
+
 
 </script>
 <template>
@@ -20,7 +56,11 @@ const value2 = ref({})
             :prefix-icon="UserFilled" />
         </el-form-item>&nbsp;
         <el-form-item prop="password">
-          <el-input class="input-i" type="password" v-model="createForm.password" placeholder="密码"
+          <el-input class="input-i" type="password" v-model="createForm.password1" placeholder="密码"
+            :prefix-icon="Lock" />
+        </el-form-item>&nbsp;
+        <el-form-item prop="password">
+          <el-input class="input-i" type="password" v-model="createForm.password2" placeholder="确认密码"
             :prefix-icon="Lock" />
         </el-form-item>&nbsp;
         <el-form-item prop="email">
@@ -66,7 +106,6 @@ const value2 = ref({})
 .input-i {
   width: 300px;
   height: 40px;
-  /* padding: 0 15px; */
 }
 
 .input {

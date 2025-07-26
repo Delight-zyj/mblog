@@ -1,7 +1,9 @@
 package com.mblog.service.impl;
 
 import com.mblog.Utils.JwtUtils;
+import com.mblog.entry.CreateInfo;
 import com.mblog.entry.LoginInfo;
+import com.mblog.entry.Result;
 import com.mblog.entry.User;
 import com.mblog.mapper.UserMapper;
 import com.mblog.service.UserService;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Slf4j
@@ -45,6 +48,7 @@ public class UserSeriviceImpl implements UserService {
         if (!dbpassword.equals(password)) {
             // 全局异常处理：用户名或密码错误
             log.info("用户名或密码错误");
+            return null;
         }
 
         // 3、匹配一致则生成token登录
@@ -59,5 +63,30 @@ public class UserSeriviceImpl implements UserService {
 
         // 不存在返回null
         return null;
+    }
+
+    @Override
+    public User create(CreateInfo createInfo) {
+        // 1、判断创建用户名是否已经存在
+        String createname = createInfo.getUsername();
+        String username = userMapper.getUsernameByCreatename(createname);
+        if(username .equals(createname)){
+            log.info("用户名已存在");
+            return null;
+        }
+
+        User user = new User();
+        String password = DigestUtils.md5DigestAsHex(createInfo.getPassword1().getBytes());
+
+        user.setUsername(createname);
+        user.setPassword(password);
+        user.setEmail(createInfo.getEmail());
+        user.setGender(3);
+        user.setAuthorType(1);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+
+        userMapper.insert(user);
+        return user;
     }
 }

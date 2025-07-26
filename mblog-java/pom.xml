@@ -106,6 +106,13 @@
             <version>1.15</version> <!-- 或更新版本 -->
         </dependency>
 
+        <!-- MyBatis-Plus 核心依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.3.1</version> <!-- 请根据需要选择版本 -->
+        </dependency>
+
 
     </dependencies>
 

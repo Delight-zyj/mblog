@@ -1,6 +1,6 @@
 package com.mblog.entry;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -15,10 +15,12 @@ public class User {
     /**
      * 用户类，用于表示系统中的用户信息
      */
+    @TableId(value = "u_userid", type = IdType.AUTO)
     private Long userId; // 用户唯一标识符
+
     private String username; // 用户名
     private String password; // 用户密码，用于账户安全
-    private String gender; // 用户性别
+    private int gender; // 用户性别
     private String email; // 用户邮箱，用于账户验证和信息推送
     private String phone; // 用户联系电话
     private String avatar; // 用户头像URL
