@@ -1,5 +1,6 @@
 package com.mblog.controller;
 
+import com.mblog.annotation.RsaDecrypt;
 import com.mblog.entry.LoginInfo;
 import com.mblog.entry.Result;
 import com.mblog.entry.User;
@@ -19,7 +20,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-
+    @RsaDecrypt
     @PostMapping
     public Result login(@RequestBody User user) {
         log.info("登录:{}", user);

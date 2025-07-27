@@ -1,5 +1,6 @@
 package com.mblog.controller;
 
+import com.mblog.annotation.RsaDecrypt;
 import com.mblog.entry.CreateInfo;
 import com.mblog.entry.Result;
 import com.mblog.entry.User;
@@ -18,6 +19,8 @@ public class CreateController {
     @Autowired
     private UserService userService;
 
+
+    @RsaDecrypt
     @RequestMapping
     public Result create(@RequestBody CreateInfo createInfo) {
         log.info("创建用户,{}", createInfo);

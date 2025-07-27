@@ -19,6 +19,5 @@ public class WebConFig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/userinfo/**", "/userinfo");  // 拦截/userinfo及其所有子路径
     }
 }
