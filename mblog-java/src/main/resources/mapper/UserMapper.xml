@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mblog.mapper.UserMapper">
     <select id="selecList">
-        select * from user
+        select *
+        from user
     </select>
+
+    <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">
+        select u_userid as userId, u_username as username, u_password as password
+        from t_user
+        where u_username = #{username}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_user
+        ( u_username, u_password, u_email, i_gender_code, d_create_time, d_update_time, i_author_type)
+        VALUES ( #{username}, #{password}, #{email}, #{gender}, #{createTime}, #{updateTime}, #{authorType});
+    </insert>
+
 </mapper>

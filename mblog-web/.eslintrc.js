@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    "es2021": true,
   },
   extends: [
     'plugin:vue/vue3-essential',
@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     indent: 'off',
     semi: 'off',
+    'import/prefer-default-export': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'linebreak-style': ['off'],
@@ -22,6 +23,18 @@ module.exports = {
     'no-unused-vars': 'off',
     'arrow-body-style': 'off',
     'max-len': ['error', { code: 300 }],
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "state", // for vuex state
+          "acc", // for reduce accumulators
+          "e", // for e.returnvalue
+          "config" // for axios config
+        ]
+      }
+    ]
   },
 };
