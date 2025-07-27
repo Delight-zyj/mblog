@@ -20,7 +20,7 @@ public class CreateController {
     private UserService userService;
 
 
-    @RsaDecrypt
+//    @RsaDecrypt
     @RequestMapping
     public Result create(@RequestBody CreateInfo createInfo) {
         log.info("创建用户,{}", createInfo);

@@ -1,7 +1,7 @@
 package com.mblog.filter;
 
-import com.mblog.Utils.CurrentHolder;
-import com.mblog.Utils.JwtUtils;
+import com.mblog.utils.CurrentHolder;
+import com.mblog.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;

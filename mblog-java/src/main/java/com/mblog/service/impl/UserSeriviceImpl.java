@@ -1,9 +1,8 @@
 package com.mblog.service.impl;
 
-import com.mblog.Utils.JwtUtils;
+import com.mblog.utils.JwtUtils;
 import com.mblog.entry.CreateInfo;
 import com.mblog.entry.LoginInfo;
-import com.mblog.entry.Result;
 import com.mblog.entry.User;
 import com.mblog.mapper.UserMapper;
 import com.mblog.service.UserService;

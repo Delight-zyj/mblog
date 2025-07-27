@@ -2,12 +2,16 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import router from '../router'
+import sysconf  from '@/config/config.js';
 
 // 创建axios实例对象
 const request = axios.create({
     // baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
-    baseURL: '/api',
-    timeout: 50000 // request timeout
+    baseURL:  "/api",
+    timeout: 50000, // request timeout
+    headers:{
+       'Content-Type': 'application/json;charset=UTF-8'
+     }
 });
 
 // 请求拦截器
