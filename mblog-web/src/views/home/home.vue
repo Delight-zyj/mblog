@@ -17,8 +17,6 @@
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
       
       <div class="operate">
-     
-
       <router-link :to="loginUser ? '/userinfo' : '/login'">
         <button class="avatar">
           <el-avatar :src="avatar ? avatar : one" />
@@ -35,15 +33,13 @@
       </div>
     </div>
     <div class="block text-center"> 
-      <h1 class="h1-hello">你好</h1>
+      <h1 class="h1-hello">{{ loginName ? '你好' : '欢迎' }}</h1>
+      <h4 class="h2-hello">{{ loginName ? '欢迎登录我的博客' : '欢迎访问我的博客' }}</h4>
     </div>
 
     <div class="block text-center">
-    
-
-      <el-carousel :interval="4000" type="card" height="610px" style="margin-top: 212px;">
+      <el-carousel :interval="4000" type="card" height="610px" style="margin-top: 162px;">
     <el-carousel-item v-for="(item,index) in carouselImages" :key="index">
-      <!-- <h3 text="2xl" justify="center">{{ item }}</h3> -->
        <img :src="item.src" :alt="item.alt" class="carousel-image" />
     </el-carousel-item>
   </el-carousel>
@@ -68,7 +64,6 @@
 </template>
 
 <script setup>
-// import { ElButton } from 'element-plus'
 import { ref, onMounted, h  } from 'vue'
 import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
@@ -87,8 +82,6 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 //   SelectAllBlog,
 //   fetchCarouselImages
 // } from '../api/home'
-
-
 
 import one from '@/assets/1.png'
 import two from '@/assets/2.png'
@@ -220,7 +213,7 @@ onMounted(() => {
   top: 5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.6%;
+  width: 96.65%;
   margin: 0 auto;
   z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
@@ -437,9 +430,19 @@ onMounted(() => {
   background-clip: text;
   color: transparent;
   margin-top: 150px;
-  margin-bottom: 100px;
+  margin-bottom: 70px;
   animation: scale 3s ease-in-out ;
   
+}
+
+.h2-hello{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dark-mode .h2-hello{
+  color: white;
 }
 
 @keyframes scale{

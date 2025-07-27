@@ -55,7 +55,7 @@ request.interceptors.response.use(
   (error) => { // 失败回调
     if (error.response.status === 401) { // 三个等号：全等（类型，数值都相等）
       // 提示信息
-      ElMessage.error('登录过期，请重新登录');
+      ElMessage.error('请先登录');
       // 跳转到登录页面
       router.push('/login');
     }

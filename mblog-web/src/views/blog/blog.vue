@@ -196,7 +196,7 @@ const logout = async () => {
   top: 5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.6%;
+  width: 96.65%;
   margin: 0 auto;
   z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);

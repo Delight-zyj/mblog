@@ -15,26 +15,15 @@
 
       <!-- 控制按钮 -->
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
-      
-      <div class="operate">
-        
-
-      <router-link :to="loginUser ? '/userinfo' : '/login'">
-        <button class="avatar">
-          <el-avatar :src="avatar ? avatar : one" />
-        </button>
-      </router-link>
-
-      <a class="loginname">
-        {{ loginName }}
-      </a>
-
-       <a href="javascript:;" @click="logout" class="quit">
-           {{ loginName ? '退出登录' : '去登录' }} 
-          </a>
-      </div>
     </div>
+     <div class="list">
+        <button>按钮1</button>
+        <button>按钮2</button>
+        <button>按钮3</button>
+      </div>
+      <div class="list-right-top">
 
+      </div>
   </div>
 </template>
 
@@ -44,7 +33,6 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // import axios, { Axios } from 'axios';
 import one from '@/assets/1.png'
-import loginUser from '@/router/index';
 import {
   ElMessage,
   ElMessageBox,
@@ -105,23 +93,25 @@ const logout = async () => {
 <style scoped>
 .home {
   min-height: 1000vh;
-  background-color: #ffffff;
   border-radius: 10px;
   margin: 5px;
   border: 1px solid #656363;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(5px);
 }
 
 .dark-mode .home {
   background-color: #000000;
+  transition: all 0.5s ease;
 }
 
 .container {
   /* position: relative; */
   position: fixed;
-  top: 5px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.65%;
+  width: 97.4%;
   margin: 0 auto;
   z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
@@ -131,10 +121,18 @@ const logout = async () => {
   border-radius: 10px 10px 0 0;
   border: 1px solid #656363;
   backdrop-filter: blur(5px);
+  transition: all 0.5s ease;
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 元素间均匀分布 */
+  
 }
 
 .dark-mode .container {
   background-color: rgb(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
+  border: 1px solid #7d7d7d;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
 }
 
 .logo {
@@ -157,10 +155,12 @@ const logout = async () => {
   position: absolute;
   top: 18%;
   left: 50%;
+  transition: all 0.5s ease;
 }
 
 .dark-mode .nav {
   background-color: rgb(0, 0, 0, 0.7);
+  transition: all 0.5s ease;
 }
 
 .nav-link {
@@ -176,7 +176,7 @@ const logout = async () => {
   min-width: 80px; /* 统一最小宽度，保持对齐 */
   text-align: center; /* 文本居中 */
   line-height: normal; /* 防止line-height影响布局 */
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .nav-link.router-link-active {
@@ -184,15 +184,18 @@ const logout = async () => {
   background-color: #3bbde9 !important; /* 可选：背景色 */
   border-radius: 20px;
   font-weight: bold;
+  transition: all 0.5s ease;
 }
 
 .dark-mode .nav-link {
   color: #e6e6e6;
+  transition: all 0.5s ease;
 }
 
 .nav-link:hover {
   color: cornflowerblue;
   border-radius: 4px;
+  transition: all 0.5s ease;
 }
 
 /* 按钮样式 */
@@ -203,70 +206,53 @@ const logout = async () => {
   width: 150px;
   height: 44px;
   border-radius: 10px;
-}
-
-.avatar {
-  position: absolute;
-  top: 13%;
-  left: 5%;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-}
-
-.loginname{
-  position: absolute;
-  top: 0%;
-  left: 50%;
-  width: 100px;
-  transition: all 0.5s ease;
-
-}
-.dark-mode .loginname {
-  color: #ffffff;
-}
-
-
-.quit{
-  position: absolute;
-  top: 50%;
-  right: 11.5%;
-  text-decoration: none;
-  color: #000000;
-  /* background-color: #ffffff !important; */
-  transition: all 0.5s ease;
-  width: 85px ;
-  height: 30px;
-  border-radius: 10px;
-  line-height: 30px;
-  text-align: center;
-}
-.dark-mode .quit {
-  color: #ffffff;
-  /* background-color: #000000; */
-}
-.quit:hover{
-  color: rgb(0, 0, 0) !important; /* 选中文字颜色 */
-  background-color: #ff0000 !important; /* 可选：背景色 */
-  border-radius: 10px;
-  font-weight: bold;
   transition: all 0.5s ease;
 }
 
-.operate{
-  position: absolute;
-  top: 14%;
-  right: 3.5%;
-  background-color: #ffffff;
-  border-radius: 10px;
-  height: 60px;
-  width: 170px;
-  border: 1px solid #d6d6d6;
+.list{
+  margin-top: 120px; 
+  width: 265px;
+  min-height: 1000px;
+  background-color: rgb(255, 255, 255, 0.5);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 40px 0 0 10px;
+  border: 1px solid #ffffff;
+  backdrop-filter: blur(5px);
+  position: absolute;
+  left: 14%; /* 或者使用 margin-left */
+  padding: 20px;
+  transition: all 0.5s ease;
+
+  
+    
 }
-.dark-mode .operate{
-  background-color: #000000;
-  border: 1px solid #333;
+.dark-mode .list{
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #656565;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+.list-right-top{
+    margin-top: 120px; 
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 40px 0 0;
+    width: 47%; 
+    min-height: 200px;
+    border: 1px solid #ffffff;
+    backdrop-filter: blur(5px);
+    position: absolute;
+    left: 36%; 
+    padding: 20px;
+    transition: all 0.5s ease;
+    
+
+}
+.dark-mode .list-right-top{
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #656565;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+
 }
 
 </style>
