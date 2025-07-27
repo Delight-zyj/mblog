@@ -30,8 +30,7 @@
         <java.version>17</java.version>
         <mybatis-generator-plugin.version>1.4.1</mybatis-generator-plugin.version>
         <mybatis-plus-spring-boot3-starter.version>3.5.7</mybatis-plus-spring-boot3-starter.version>
-        <mysql-connector-java.version>8.0.34</mysql-connector-java.version>
-        <lombok.version>1.18.36</lombok.version>
+        <mysql-connector-java.version>8.0.29</mysql-connector-java.version>
     </properties>
     <dependencies>
         <dependency>
