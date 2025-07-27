@@ -7,6 +7,8 @@ const sysconf = {
   layout: 'sidebar',
   // 默认主题色
   themeColor: '#409eff',
+  // 默认请求地址
+  baseUrl : 'http://localhost:8081',
 };
 
 export default sysconf;
