@@ -16,9 +16,18 @@ public class WebConFig implements WebMvcConfigurer {
     @Autowired
     private TokenInterceptor tokenInterceptor;
 
+    @Autowired
+    private RsaDecryptInterceptor rsaDecryptInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 解密
+        registry.addInterceptor(rsaDecryptInterceptor)
+                .addPathPatterns("/**")
+                .order(1);
+
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/userinfo/**", "/userinfo");  // 拦截/userinfo及其所有子路径
+                .addPathPatterns("/userinfo/**", "/userinfo")
+                .order(2);  // 拦截/userinfo及其所有子路径
     }
 }
