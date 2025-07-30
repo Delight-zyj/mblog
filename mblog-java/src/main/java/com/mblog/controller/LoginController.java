@@ -23,6 +23,12 @@ public class LoginController {
     public Result login(@RequestBody User user) {
         log.info("登录:{}", user);
         LoginInfo loginInfo = userService.login(user);
+        if (loginInfo.getId().equals(-1L)){
+            return Result.error("用户不存在");
+        }
+        if (loginInfo.getId().equals(-2L)){
+            return Result.error("用户名或密码错误");
+        }
         return Result.success(loginInfo);
     }
 }

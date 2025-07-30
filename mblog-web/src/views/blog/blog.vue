@@ -97,11 +97,29 @@
       </el-menu>
     </el-col>
   </div>
+  <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
+    <div
+      style="
+        height: 100%;
+        width: 100%;
+        /* background-color: var(--el-bg-color-overlay); */
+        box-shadow: var(--el-box-shadow-lighter);
+        background: #ffffff;
+        text-align: center;
+        border-radius: 10px;
+        /* line-height: 80px; */
+        color: #1989fa;
+      "
+    >
+    <el-icon style="font-size: 30px;"><Top /></el-icon><br>
+      回到顶部
+    </div>
+  </el-backtop>
 </template>
 
 <script setup>
 // import { ElButton } from 'element-plus'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 // import axios, { Axios } from 'axios';
 import one from '@/assets/1.png'
@@ -165,10 +183,19 @@ const logout = async () => {
     { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }
   ).then(async () => {
     ElMessage.success('退出成功');
-    // 移除token信息
-    localStorage.removeItem('loginUser');
-    // 跳转页面
+    // // 检查是否记住密码
+    // const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
+    
+    // if(!rememberMeValue){
+    //     // 如果没有记住密码，清除登录信息
+    //     localStorage.removeItem('loginUser');
+    // }
+
+ // 跳转页面
     router.push('/login');
+
+    handlePageHide();
+   
   }).catch(() => {
     ElMessage.info({
     message: '您已取消退出'
@@ -176,8 +203,31 @@ const logout = async () => {
   })
 }
 
+
+// 使用 pagehide 事件（仅在页面真正关闭时触发）
+const handlePageHide = (event) => {
+  // 检查是否记住密码
+  const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
+  
+  if (!rememberMeValue) {
+    // 如果没有记住密码，清除登录信息
+    localStorage.removeItem('loginUser');
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('pagehide', handlePageHide);
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pagehide', handlePageHide);
+})
+
 </script>
 <style scoped>
+*{
+  transition: all 1.5s ease;
+}
 .home {
   min-height: 1000vh;
   background-color: #ffffff;

@@ -15,6 +15,9 @@ import mixin from './config/minix';
 
 // 挂载
 const app = createApp(App);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 app.use(ELmenetPlus).use(store).use(router);
 app.mixin(mixin);
 app.mount('#app');

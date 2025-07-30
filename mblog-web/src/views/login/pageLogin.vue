@@ -28,10 +28,10 @@
 
       <el-switch v-model="rememberMe" class="ml-2"
         style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949; padding-left: 10px;" />
-      <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住用户名</span>
+      <span style="font-size: 13px; padding-top: 2px; padding-left: 10px; color: #fff;">记住密码</span>
       <router-link to="/change">
         <el-button
-          style="font-size: 13px;  border: 0; padding: 2px; margin-left: 100px; background-color:  transparent;">
+          style="font-size: 13px;  border: 0; padding: 2px; margin-left: 112px; background-color:  transparent;">
           <span style="color: #fff;">忘记密码</span>
         </el-button>
       </router-link>
@@ -85,11 +85,11 @@ const loginForm = ref({ username: '' , password: '' })
 const router = useRouter()
 
 // 记住密码状态
-const rememberMe = ref(false)
+const rememberMe = ref()
 
 // 监听 rememberMe 变化并保存到 localStorage
 watch(rememberMe, (newValue) => {
-  localStorage.setItem('rememberMeValue ', JSON.stringify(newValue))
+  localStorage.setItem('rememberMeValue', JSON.stringify(newValue))
 }, { immediate: true })
 
 const centerDialogVisible = ref(false)

@@ -11,7 +11,7 @@ public class CreateInfo {
 
     private long id;
     private String username;
-    private String password1;
-    private String password2;
+    private String password1;// 密码
+    private String password2;// 确认密码
     private String email;
 }

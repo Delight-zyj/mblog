@@ -1,5 +1,6 @@
 package com.mblog.service.impl;
 
+import com.mblog.entry.Result;
 import com.mblog.utils.JwtUtils;
 import com.mblog.entry.CreateInfo;
 import com.mblog.entry.LoginInfo;
@@ -32,12 +33,12 @@ public class UserSeriviceImpl implements UserService {
 
         // 1、调用Mapper查询数据库中加密过的密码和id
         User u = userMapper.selectIdAndPasswordByUsername(username);
-        u.setAvatar(userMapper.selectAvatarByUsername(username));
 
         // 2、判断是否存在这个用户
         if (u == null) {
             // 全局异常处理：用户不存在
             log.info("用户不存在");
+            return new LoginInfo(-1L, "用户不存在", null,null);
         }
 
         // 获取数据库中的密码
@@ -47,8 +48,11 @@ public class UserSeriviceImpl implements UserService {
         if (!dbpassword.equals(password)) {
             // 全局异常处理：用户名或密码错误
             log.info("用户名或密码错误");
-            return null;
+            return new LoginInfo(-2L, "用户名或密码错误", null,null);
         }
+
+        // 获取用户头像
+        u.setAvatar(userMapper.selectAvatarByUsername(username));
 
         // 3、匹配一致则生成token登录
         if (dbpassword.equals(password)) {

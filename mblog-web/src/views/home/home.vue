@@ -61,10 +61,28 @@
   </div>
 
   </div>
+  <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
+    <div
+      style="
+        height: 100%;
+        width: 100%;
+        /* background-color: var(--el-bg-color-overlay); */
+        box-shadow: var(--el-box-shadow-lighter);
+        background: #ffffff;
+        text-align: center;
+        border-radius: 10px;
+        /* line-height: 80px; */
+        color: #1989fa;
+      "
+    >
+    <el-icon style="font-size: 30px;"><Top /></el-icon><br>
+      回到顶部
+    </div>
+  </el-backtop>
 </template>
 
 <script setup>
-import { ref, onMounted, h  } from 'vue'
+import { ref, onMounted, h ,onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
 import loginUser from '@/router/index';
@@ -165,15 +183,19 @@ const logout = async () => {
     { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }
   ).then(async () => {
     ElMessage.success('退出成功');
-    // 检查是否记住密码
-    const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue ') || 'false')
+    // // 检查是否记住密码
+    // const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
     
-    if(!rememberMeValue){
-        // 如果没有记住密码，清除登录信息
-        localStorage.removeItem('loginUser');
-    }
-    // 跳转页面
+    // if(!rememberMeValue){
+    //     // 如果没有记住密码，清除登录信息
+    //     localStorage.removeItem('loginUser');
+    // }
+
+ // 跳转页面
     router.push('/login');
+
+    handlePageHide();
+   
   }).catch(() => {
     ElMessage.info({
     message: '您已取消退出'
@@ -188,6 +210,24 @@ onMounted(() => {
   }
 })
 
+// 使用 pagehide 事件（仅在页面真正关闭时触发）
+const handlePageHide = (event) => {
+  // 检查是否记住密码
+  const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
+  
+  if (!rememberMeValue) {
+    // 如果没有记住密码，清除登录信息
+    localStorage.removeItem('loginUser');
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('pagehide', handlePageHide);
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pagehide', handlePageHide);
+})
 
 </script>
 <style scoped>
@@ -199,12 +239,13 @@ onMounted(() => {
   border-radius: 10px;
   margin: 5px;
   border: 1px solid #656363;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .dark-mode .home {
   background-color: #000000;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
+  
 }
 
 .container {
@@ -223,12 +264,14 @@ onMounted(() => {
   border-radius: 10px 10px 0 0;
   border: 1px solid #656363;
   backdrop-filter: blur(5px);
-  transition: all 0.5s ease;
+    transition: all 1.5s ease;
+
 }
 
 .dark-mode .container {
   background-color: rgb(0, 0, 0, 0.5);
-  transition: all 0.5s ease;
+    transition: all 1.5s ease;
+
 }
 
 .logo {
@@ -251,12 +294,12 @@ onMounted(() => {
   position: absolute;
   top: 18%;
   left: 50%;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .dark-mode .nav {
   background-color: rgb(0, 0, 0, 0.7);
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .nav-link {
@@ -280,7 +323,7 @@ onMounted(() => {
   background-color: #3bbde9 !important; /* 可选：背景色 */
   border-radius: 20px;
   font-weight: bold;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .dark-mode .nav-link {
@@ -291,7 +334,7 @@ onMounted(() => {
 .nav-link:hover {
   color: cornflowerblue;
   border-radius: 4px;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 /* 按钮样式 */
@@ -318,12 +361,12 @@ onMounted(() => {
   top: 0%;
   left: 50%;
   width: 100px;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 
 }
 .dark-mode .loginname {
   color: #ffffff;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 
@@ -340,17 +383,19 @@ onMounted(() => {
   border-radius: 10px;
   line-height: 30px;
   text-align: center;
+  transition: all 1.5s ease;
+
 }
 .dark-mode .quit {
   color: #ffffff;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 .quit:hover{
   color: rgb(0, 0, 0) !important; /* 选中文字颜色 */
   background-color: #ff0000 !important; /* 可选：背景色 */
   border-radius: 10px;
   font-weight: bold;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .operate{
@@ -363,12 +408,12 @@ onMounted(() => {
   width: 170px;
   border: 1px solid #d6d6d6;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 .dark-mode .operate{
   background-color: #000000;
   border: 1px solid #333;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 }
 
 .demonstration {
@@ -439,10 +484,14 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 1.5s ease;
+
 }
 
 .dark-mode .h2-hello{
   color: white;
+  transition: all 1.5s ease;
+
 }
 
 @keyframes scale{
@@ -457,11 +506,15 @@ onMounted(() => {
 .blog-title{
    background-color: #ffffff;
    color: #000000;
+  transition: all 1.5s ease;
+
 }
 
 .dark-mode .blog-title{
   background-color: #fffdfd;
   color: #000000;
+  transition: all 1.5s ease;
+
 }
 
 </style>
