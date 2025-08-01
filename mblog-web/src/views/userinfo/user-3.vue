@@ -17,8 +17,8 @@
       <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
     </div>
      <div class="list">
-      <router-link to="/userinfo" class="user-0">个人信息</router-link>
-      <router-link to="/user-1" class="user-0">个人博客</router-link>
+      <router-link to="/userinfo" class="user-0">个人主页</router-link>
+      <router-link to="/user-1" class="user-0">个人主页</router-link>
       <router-link to="/user-2" class="user-0">个人主页</router-link>
         
         
@@ -27,112 +27,16 @@
          <el-avatar :src="avatar ? avatar : one"  class="avatar"/>
         <a class="loginname" >{{ loginName }}</a>
         <button class="change-username">     <el-icon><EditPen /></el-icon>  </button>
-        <button class="change-userinfo" @click="edit(id)">     修改个人信息>  </button>
+        <button class="change-userinfo">     修改个人信息>  </button>
 
-        <span class="email"><el-icon><Message /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ email ?email :'未设置邮箱' }}</span>
-        <span class="phone"><el-icon><Iphone /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ phone ? phone : '未设置手机号'}}</span>
+        <span class="email"><el-icon><Message /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;449119501@qq.com</span>
+        <span class="phone"><el-icon><Iphone /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18888888888</span>
       </div>
 
       <div class="list-right-bottom"> 
-      
+
       </div>
-
-      
-
   </div>
-
-  <el-dialog
-    v-model="changeuserinfo"
-    title="修改个人信息"
-    width="500"
-    draggable
-    overflow
-    class="change-dialog"
-  >
-
-  <el-form :model="userinfo" :rules="rules" ref="userinforef">
-       <!-- 第一行 -->
-       <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="userinfo.username" placeholder="请输入员工用户名，2-20个字"></el-input>
-          </el-form-item>
-        </el-col>
-       </el-row>
-       <!-- 第二行 -->
-       <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="性别&nbsp;&nbsp;&nbsp;&nbsp;" prop="gender">
-            <el-select v-model="userinfo.gender" placeholder="请选择性别" style="width: 100%;">
-              <el-option v-for="(g) in genders" :key="g.value" :label="g.name" :value="g.value"></el-option>
-            </el-select>
-          </el-form-item>
-       </el-col>
-      </el-row>
-      <!-- 第三行 -->
-      <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="userinfo.phone" placeholder="请输入手机号"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <!-- 第四行 -->
-      <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="邮箱&nbsp;&nbsp;&nbsp;&nbsp;" prop="email">
-            <el-input v-model="userinfo.email" placeholder="请输入邮箱"></el-input>
-          </el-form-item>
-        </el-col>    
-      </el-row>
-      <!-- 第五行 -->
-      <!-- <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="最近修改日期">
-            <el-date-picker v-model="userinfo.updateTime" type="date" style="width: 100%;" placeholder="选择日期"
-              format="YYYY-MM-DD" value-format="YYYY-MM-DD" disabled></el-date-picker>
-          </el-form-item>
-          <el-form-item label="注册日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
-            <el-date-picker v-model="userinfo.createTime" type="date" style="width: 100%;" placeholder="选择日期"
-              format="YYYY-MM-DD" value-format="YYYY-MM-DD" disabled></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-
-      <!-- 第五行 -->
-      <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="头像">
-            <el-upload class="avatar-uploader" action="/api/upload" :headers="{'token': token}" :show-file-list="false"
-              :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-              <img v-if="userinfo.avatar" :src="userinfo.avatar" class="change-avatar" />
-              <el-icon v-else class="avatar-uploader-icon">
-                <Plus />
-              </el-icon>
-            </el-upload>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-
-  </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="changeuserinfo = false">退出</el-button>
-        <el-button type="primary" @click="changeuserinfo = false">
-          提交
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
-   
-
     <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
     <div
       style="
@@ -154,9 +58,10 @@
 </template>
 
 <script setup>
+// import { ElButton } from 'element-plus'
 import { ref, onMounted,onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+// import axios, { Axios } from 'axios';
 import one from '@/assets/1.png'
 import {
   ElMessage,
@@ -166,90 +71,30 @@ import {
   ElCarouselItem
 } from 'element-plus'
 
-//性别列表数据
-const genders = ref([{ name: '男', value: 1 }, { name: '女', value: 2 },{ name: '未说明性别', value: 3 },{ name: '未知性别', value: 4 }])
+import {
+  darkMode,
+  toggleDark
+} from '../api/blackAndWhire'
 
-const dialogVisible = ref(false)
-const changeuserinfo = ref(false)
 
-// 获取用户信息
-const id = ref('');
 const loginName = ref('');
-const age = ref('');
-const phone = ref('');
-const email = ref('');
-const gender = ref('');
-const author = ref('');
-const createTime = ref('');
-const updateTime = ref('');
 const avatar = ref('');
 const router = useRouter();
+// 钩子函数(获取用户名信息)
 onMounted(() => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  // 获取用户id信息
-  if (loginUser && loginUser.id) {
-    id.value = loginUser.id;
-  }
-  // 获取用户名信息
   if (loginUser && loginUser.username) {
     loginName.value = loginUser.username;
   }
-  // 获取用户头像信息
+})
+
+// 获取用户头像
+onMounted(() => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   if (loginUser && loginUser.avatar) {
     avatar.value = loginUser.avatar;
   }
-  // 获取用户年龄信息
-  if (loginUser && loginUser.age) {
-    age.value = loginUser.age;
-  }
-  // 获取用户手机信息
-  if (loginUser && loginUser.phone) {
-    phone.value = loginUser.phone;
-  }
-  // 获取用户邮箱信息
-  if (loginUser && loginUser.email) {
-    email.value = loginUser.email;
-  }
-  // 获取用户类型信息
-  if (loginUser && loginUser.author) {
-    if(loginUser.author === 0){
-      author.value = '超级管理员';
-    }
-    if(loginUser.author === 1){
-      author.value = '普通用户';
-    }
-  }
-  // 获取用户性别信息
-  if (loginUser && loginUser.gender) {
-    if(loginUser.gender === 1){
-      gender.value = '男';
-    }
-    if(loginUser.gender === 2){
-      gender.value = '女';
-    }
-    if(loginUser.gender === 3){
-      gender.value = '未说明性别';
-    }
-    if(loginUser.gender === 4){
-      gender.value = '未知性别';
-    }
-  }
-  // 获取用户创建时间信息
-  if (loginUser && loginUser.createTime) {
-    createTime.value = loginUser.createTime;
-  }
-  // 获取用户修改时间信息
-  if (loginUser && loginUser.updateTime) {
-    updateTime.value = loginUser.updateTime;
-  }
 })
-
-const edit = async (username) => {
-  const result = await getUserinfoByIdApi(id.value);
-  changeuserinfo.value = true;
-  userinfo.value = result.data;
-
-}
 
 // 退出登录
 const logout = async () => {
@@ -282,6 +127,8 @@ const logout = async () => {
 });
   })
 }
+
+
 // 使用 pagehide 事件（仅在页面真正关闭时触发）
 const handlePageHide = (event) => {
   // 检查是否记住密码
@@ -292,43 +139,15 @@ const handlePageHide = (event) => {
     localStorage.removeItem('loginUser');
   }
 }
+
 onMounted(() => {
   window.addEventListener('pagehide', handlePageHide);
 })
+
 onBeforeUnmount(() => {
   window.removeEventListener('pagehide', handlePageHide);
 })
 
-
-const search = async () => {
-  const result = await SelectUserInfo(
-    searchForm.value.username,
-    searchForm.value.gender,
-    searchForm.value.age,
-    searchForm.value.authorType,
-    searchForm.value.email,
-    searchForm.value.phone,
-    searchForm.value.authorType,
-    searchForm.value.createTime,
-    searchForm.value.updateTime,
-  );
-}
-
-// 搜索表单对象
-const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
-
-
-const userinfo = ref({
-  username: '',
-  gender: '',
-  email: '',
-  phone: '',
-  authorType: '',
-  createTime: '',
-  updateTime: ''
-})
-
-const clear = () => {}
 
 </script>
 <style scoped>
@@ -367,7 +186,7 @@ const clear = () => {}
   transform: translateX(-50%);
   width: 96.65%;
   margin: 0 auto;
-  z-index: 2;
+  z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -375,7 +194,7 @@ const clear = () => {}
   border-radius: 10px 10px 0 0;
   border: 1px solid #656363;
   backdrop-filter: blur(5px);
-  transition: all 1.5s ease;
+    transition: all 1.5s ease;
 
 }
 
@@ -575,17 +394,11 @@ const clear = () => {}
   margin-top: 80px;
   margin-left: 30px;
 }
-.change-avatar{
-  width: 160px;
-  height: 160px;
-  margin-left: 15px;
-
-}
 
 .loginname{
   font-size: 30px;
   position: fixed;
-  top: 48%;
+  top: 40%;
   left: 23%;
   transition: all 1.5s ease;
 
@@ -600,7 +413,7 @@ const clear = () => {}
   border: none;
   font-size: 20px;
   position: fixed;
-  top: 53.5%;
+  top: 45.5%;
   left: 40%;
   transition: all 0.5s ease;
 
@@ -666,15 +479,6 @@ const clear = () => {}
 
 }
 
-.change-dialog{
-  backdrop-filter: blur(5px);
-  
-}
-.dark-mode .change-dialog{
-  background-color: rgba(0, 0, 0, 0.5);
-  transition: all 1.5s ease;
-
-}
 
 
 </style>

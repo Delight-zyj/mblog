@@ -10,4 +10,7 @@ public interface UserService {
 
     User create(CreateInfo createInfo);
 
+    void updateUserinfo(User user);
+
+    User selectIdUserinfoById(Long id);
 }

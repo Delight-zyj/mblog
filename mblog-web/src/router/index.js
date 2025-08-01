@@ -7,6 +7,9 @@ import change from '../views/change/change.vue';
 import blog from '../views/blog/blog.vue';
 import author from '../views/author/author.vue';
 import userinfo from '../views/userinfo/userinfo.vue';
+import user1 from '../views/userinfo/user-1.vue';
+import user2 from '../views/userinfo/user-2.vue';
+import user3 from '../views/userinfo/user-3.vue';
 
 const routes = [
    {
@@ -22,6 +25,9 @@ const routes = [
   { path: '/blog', name: 'blog', component: blog, },
   { path: '/author', name: 'author', component: author, },
   { path: '/userinfo', name: 'userinfo', component: userinfo, },
+  { path: '/user-1', name: 'user1', component: user1, },
+  { path: '/user-2', name: 'user2', component: user2, },
+  { path: '/user-3', name: 'user3', component: user3, },
 ];
 
 const router = createRouter({

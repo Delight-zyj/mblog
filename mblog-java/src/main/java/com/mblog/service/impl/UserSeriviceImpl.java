@@ -22,6 +22,52 @@ public class UserSeriviceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+//    @Override
+//    public LoginInfo login(User user) {
+//
+//        String username = user.getUsername();
+//        String password = user.getPassword();
+//
+//        // 对密码进行MD5加密
+//        password = DigestUtils.md5DigestAsHex(password.getBytes());
+//
+//        // 1、调用Mapper查询数据库中加密过的密码和id
+//        User u = userMapper.selectIdAndPasswordByUsername(username);
+//
+//        // 2、判断是否存在这个用户
+//        if (u == null) {
+//            // 全局异常处理：用户不存在
+//            log.info("用户不存在");
+//            return new LoginInfo(-1L, "用户不存在", null, null);
+//        }
+//
+//        // 获取数据库中的密码
+//        String dbpassword = u.getPassword();
+//
+//        // 判断用户名和密码匹配是否一致
+//        if (!dbpassword.equals(password)) {
+//            // 全局异常处理：用户名或密码错误
+//            log.info("用户名或密码错误");
+//            return new LoginInfo(-2L, "用户名或密码错误", null, null);
+//        }
+//
+//        // 获取用户头像
+//        u.setAvatar(userMapper.selectAvatarByUsername(username));
+//
+//        // 3、匹配一致则生成token登录
+//        if (dbpassword.equals(password)) {
+//            // 生成JWT令牌
+//            HashMap<String, Object> claims = new HashMap<>();
+//            claims.put("UserId", u.getUserId());
+//            claims.put("username", u.getUsername());
+//            String token = JwtUtils.generateJwt(claims);
+//            return new LoginInfo(u.getUserId(), u.getUsername(), token, u.getAvatar());
+//        }
+//
+//        // 不存在返回null
+//        return null;
+//    }
+
     @Override
     public LoginInfo login(User user) {
 
@@ -38,7 +84,7 @@ public class UserSeriviceImpl implements UserService {
         if (u == null) {
             // 全局异常处理：用户不存在
             log.info("用户不存在");
-            return new LoginInfo(-1L, "用户不存在", null,null);
+            return new LoginInfo(-1L, "用户不存在", null, null, null, null, 9, 9, null, null, 9);
         }
 
         // 获取数据库中的密码
@@ -48,11 +94,8 @@ public class UserSeriviceImpl implements UserService {
         if (!dbpassword.equals(password)) {
             // 全局异常处理：用户名或密码错误
             log.info("用户名或密码错误");
-            return new LoginInfo(-2L, "用户名或密码错误", null,null);
+            return new LoginInfo(-2L, "用户名或密码错误", null, null, null, null, 9, 9, null, null, 9);
         }
-
-        // 获取用户头像
-        u.setAvatar(userMapper.selectAvatarByUsername(username));
 
         // 3、匹配一致则生成token登录
         if (dbpassword.equals(password)) {
@@ -61,19 +104,25 @@ public class UserSeriviceImpl implements UserService {
             claims.put("UserId", u.getUserId());
             claims.put("username", u.getUsername());
             String token = JwtUtils.generateJwt(claims);
-            return new LoginInfo(u.getUserId(), u.getUsername(), token, u.getAvatar());
+            // 处理age可能为null的情况
+            Integer age = u.getAge();
+            if (age == null) {
+                age = 0;
+            }
+            return new LoginInfo(u.getUserId(), u.getUsername(), token, u.getAvatar(), u.getCreateTime(), u.getUpdateTime(), u.getAuthorType(), age, u.getEmail(), u.getPhone(), u.getGender());
         }
 
         // 不存在返回null
         return null;
     }
 
+
     @Override
     public User create(CreateInfo createInfo) {
         // 1、判断创建用户名是否已经存在
         String createname = createInfo.getUsername();
         String username = userMapper.getUsernameByCreatename(createname);
-        if(username .equals(createname)){
+        if (username.equals(createname)) {
             log.info("用户名已存在");
             return null;
         }
@@ -92,4 +141,17 @@ public class UserSeriviceImpl implements UserService {
         userMapper.insert(user);
         return user;
     }
+
+    @Override
+    public void updateUserinfo(User user) {
+        userMapper.updateUserinfo(user);
+    }
+
+    @Override
+    public User selectIdUserinfoById(Long id) {
+        User user = userMapper.selectUserinfoById(id);
+        return user;
+    }
+
+
 }

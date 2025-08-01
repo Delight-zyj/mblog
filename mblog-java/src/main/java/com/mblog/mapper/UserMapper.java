@@ -28,4 +28,11 @@ public interface UserMapper {
     String getUsernameByCreatename(String username);
 
     void insert(User user);
+
+    @Select("select * from t_user where u_username = #{username} ")
+    User selectIdUserinfo(String username);
+
+    void updateUserinfo(User user);
+//    @Select("select * from t_user where u_userId = #{id} ")
+    User selectUserinfoById(Long id);
 }

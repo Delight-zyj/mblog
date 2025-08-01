@@ -1,7 +1,7 @@
 spring:
   application:
     name: mblog-java
-# 数据源配置
+  # MySQL数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/mblog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
@@ -13,6 +13,12 @@ spring:
       idle-timeout: 30000
       max-lifetime: 1800000
       connection-timeout: 30000
+  #  mongodb
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mblog
+
+
 #  jpa:
 #    hibernate:
 #      ddl-auto: update
@@ -25,9 +31,15 @@ server:
   port: 8081
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true  # 如果设为 false，则驼峰转下划线失效
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   level:
     com.mblog.mapper: debug
 
+  #mgdb
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mblog

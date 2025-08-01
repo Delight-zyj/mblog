@@ -8,10 +8,21 @@
         from user
     </select>
 
+<!--    <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">-->
+<!--        select u_userId as userId, u_username as username, u_password as password-->
+<!--        from t_user-->
+<!--        where u_username = #{username}-->
+<!--    </select>-->
+
     <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">
-        select u_userId as userId, u_username as username, u_password as password
+        select u_userId as userId, u_username as username, u_password as password, u_image as avatar,d_create_time as createTime ,d_update_time as updateTime,i_author_type as authorType,u_age as age,u_phone as phone,u_email as email,i_gender_code as gender
         from t_user
         where u_username = #{username}
+    </select>
+    <select id="selectUserinfoById" resultType="com.mblog.entry.User">
+        select u_userId as userId, u_username as username, u_password as password, u_image as avatar,d_create_time as createTime ,d_update_time as updateTime,i_author_type as authorType,u_age as age,u_phone as phone,u_email as email,i_gender_code as gender
+        from t_user
+        where u_userId = #{id}
     </select>
 
     <insert id="insert">
@@ -19,5 +30,19 @@
         ( u_username, u_password, u_email, i_gender_code, d_create_time, d_update_time, i_author_type)
         VALUES ( #{username}, #{password}, #{email}, #{gender}, #{createTime}, #{updateTime}, #{authorType});
     </insert>
+
+    <update id="updateUserinfo">
+        UPDATE t_user
+        SET u_username    = #{username},
+            u_password    = #{password},
+            u_email       = #{email},
+            i_gender_code = #{gender},
+            d_update_time = #{updateTime},
+            i_author_type = #{authorType},
+            u_age         = #{age},
+            u_phone       = #{phone},
+            u_image       = #{avatar}
+        WHERE u_username = #{username}
+    </update>
 
 </mapper>
