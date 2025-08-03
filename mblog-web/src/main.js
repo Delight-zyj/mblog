@@ -18,6 +18,15 @@ const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+// 添加全局日期格式化方法
+app.config.globalProperties.$formatDate = function(dateString, format = 'YYYY-MM-DD') {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 app.use(ELmenetPlus).use(store).use(router);
 app.mixin(mixin);
 app.mount('#app');

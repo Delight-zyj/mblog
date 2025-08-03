@@ -7,9 +7,9 @@ import change from '../views/change/change.vue';
 import blog from '../views/blog/blog.vue';
 import author from '../views/author/author.vue';
 import userinfo from '../views/userinfo/userinfo.vue';
-import user1 from '../views/userinfo/user-1.vue';
-import user2 from '../views/userinfo/user-2.vue';
-import user3 from '../views/userinfo/user-3.vue';
+import user1 from '../views/user-1/user-1.vue';
+import user2 from '../views/user-2/user-2.vue';
+import user3 from '../views/user-3/user-3.vue';
 
 const routes = [
    {

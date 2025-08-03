@@ -107,7 +107,7 @@ const result = await loginApi(loginForm.value);
     // 2、 存储当前员工登录信息
     localStorage.setItem('loginUser', JSON.stringify(result.data))
     // 3、跳转首页
-    router.push('/')
+    router.push('/home')
   } else { // 失败
     ElMessage.error(result.msg);
   }

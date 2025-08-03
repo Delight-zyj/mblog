@@ -19,12 +19,12 @@
       <div class="operate">
       <router-link :to="loginUser ? '/userinfo' : '/login'">
         <button class="avatar">
-          <el-avatar :src="avatar ? avatar : one" />
+          <el-avatar :src="userinfo.avatar ? userinfo.avatar : one" />
         </button>
       </router-link>
 
       <a class="loginname">
-        {{ loginName }}
+        {{ userinfo.username }}
       </a>
 
        <a href="javascript:;" @click="logout" class="quit">
@@ -46,7 +46,7 @@
     </div>
 
     <div >
-    <el-table :data="deptList" border style="" class="blog">
+    <!-- <el-table :data="deptList" border style="" class="blog">
       <el-table-column prop="name" label="部门名称" width="100" align="center" />
       <el-table-column prop="createTime" label="最后操作时间" width="35" align="center" />
        <el-table-column prop="name" label="部门名称" width="35" align="center" />
@@ -57,7 +57,7 @@
           <el-button type="danger" size="small" @click="deleteById(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
   </div>
 
   </div>
@@ -86,6 +86,8 @@ import { ref, onMounted, h ,onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router';
 // import axios, { Axios } from 'axios';
 import loginUser from '@/router/index';
+import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+
 import {
   ElMessage,
   ElMessageBox,
@@ -142,7 +144,7 @@ const carouselImages = ref([
 
 ])
 
-// 弹窗函数
+// 欢迎弹窗函数
 const open1 = () => {
   ElNotification({
     title: '欢迎访问',
@@ -152,24 +154,34 @@ const open1 = () => {
     zIndex: 99999
   })
 }
-
-const loginName = ref('');
-const avatar = ref("");
-const router = useRouter();
-// 钩子函数(获取用户名信息)
+// 页面加载时触发
+// 未登录时，弹出欢迎信息
+onMounted(() => {
+  if(!loginUser){
+    open1()
+  }
+})
+// 已登录时否，获取用户信息
 onMounted(() => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   if (loginUser && loginUser.username) {
     loginName.value = loginUser.username;
+    id.value = loginUser.id;
+    fetchUserInfo(id.value);
   }
 })
+// 新增获取用户信息的方法
+const fetchUserInfo = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    userinfo.value = result.data;
+  }
+}
+const id = ref('');
+const loginName = ref('');
+const router = useRouter();
 
-onMounted(() => {
-  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  if (loginUser && loginUser.avatar) {
-    avatar.value = loginUser.avatar;
-  }
-})
+
 
 // 退出登录
 const logout = async () => {
@@ -203,18 +215,13 @@ const logout = async () => {
   })
 }
 
-// 页面加载时触发
-onMounted(() => {
-  if(!loginName.value){
-    open1()
-  }
-})
+
+
 
 // 使用 pagehide 事件（仅在页面真正关闭时触发）
 const handlePageHide = (event) => {
   // 检查是否记住密码
   const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
-  
   if (!rememberMeValue) {
     // 如果没有记住密码，清除登录信息
     localStorage.removeItem('loginUser');
@@ -228,6 +235,31 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('pagehide', handlePageHide);
 })
+const userinfo = ref({
+  username: '',
+  gender: '',
+  email: '',
+  phone: '',
+  authorType: '',
+  createTime: '',
+  updateTime: ''
+})
+const search = async () => {
+  const result = await getUserinfoByIdApi(
+    searchForm.value.username,
+    searchForm.value.gender,
+    searchForm.value.age,
+    searchForm.value.authorType,
+    searchForm.value.email,
+    searchForm.value.phone,
+    searchForm.value.authorType,
+    searchForm.value.createTime,
+    searchForm.value.updateTime,
+  );
+}
+
+// 搜索表单对象
+const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
 
 </script>
 <style scoped>
@@ -358,8 +390,8 @@ onBeforeUnmount(() => {
 
 .loginname{
   position: absolute;
-  top: 0%;
-  left: 50%;
+  top: 4%;
+  left: 40%;
   width: 100px;
   transition: all 1.5s ease;
 

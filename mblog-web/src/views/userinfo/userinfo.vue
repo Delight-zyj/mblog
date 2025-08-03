@@ -19,25 +19,23 @@
      <div class="list">
       <router-link to="/userinfo" class="user-0">个人信息</router-link>
       <router-link to="/user-1" class="user-0">个人博客</router-link>
-      <router-link to="/user-2" class="user-0">个人主页</router-link>
-        
-        
+      <router-link to="/user-2" class="user-0">个人主页</router-link>       
       </div>
+
       <div class="list-right-top">
-         <el-avatar :src="avatar ? avatar : one"  class="avatar"/>
-        <a class="loginname" >{{ loginName }}</a>
-        <button class="change-username">     <el-icon><EditPen /></el-icon>  </button>
+         <el-avatar :src="userinfo.avatar ? userinfo.avatar : one" class="avatar"/>
+        <a class="loginname" >{{ userinfo.username }}</a>
+        <!-- <button class="change-username">     <el-icon><EditPen /></el-icon>  </button> -->
+        
         <button class="change-userinfo" @click="edit(id)">     修改个人信息>  </button>
 
-        <span class="email"><el-icon><Message /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ email ?email :'未设置邮箱' }}</span>
-        <span class="phone"><el-icon><Iphone /></el-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ phone ? phone : '未设置手机号'}}</span>
+        <span class="create-time" >注册时间：{{ $formatDate(userinfo.createTime)}}</span>
+        <span class="update-time" >最近修改：{{ $formatDate(userinfo.updateTime)}}</span>
       </div>
 
       <div class="list-right-bottom"> 
       
       </div>
-
-      
 
   </div>
 
@@ -89,6 +87,15 @@
           </el-form-item>
         </el-col>    
       </el-row>
+
+      <!-- <el-row :gutter="20">
+        <el-col :span="3"></el-col>
+        <el-col :span="12">
+          <el-form-item label="年龄&nbsp;&nbsp;&nbsp;&nbsp;" prop="age">
+            <el-input v-model="userinfo.age" placeholder="请输入年龄"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row> -->
       <!-- 第五行 -->
       <!-- <el-row :gutter="20">
         <el-col :span="3"></el-col>
@@ -125,7 +132,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="changeuserinfo = false">退出</el-button>
-        <el-button type="primary" @click="changeuserinfo = false">
+        <el-button type="primary" @click="primary">
           提交
         </el-button>
       </div>
@@ -166,89 +173,137 @@ import {
   ElCarouselItem
 } from 'element-plus'
 
+import {
+  darkMode,
+  toggleDark
+} from '../api/blackAndWhire'
+
+// 页面加载时触发
+ const id = ref('');
+onMounted(() => {
+   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  // 获取用户id信息
+  if (loginUser && loginUser.id) {
+    id.value = loginUser.id;
+  fetchUserInfo(id.value);
+  }
+})
+
+// 新增获取用户信息的方法
+const fetchUserInfo = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    userinfo.value = result.data;
+  }
+}
 //性别列表数据
 const genders = ref([{ name: '男', value: 1 }, { name: '女', value: 2 },{ name: '未说明性别', value: 3 },{ name: '未知性别', value: 4 }])
+
+// 用户类型列表数据
+const authorTypes = ref([{ name: '超级管理员', value: 0 }, { name: '普通用户', value: 1 }])
 
 const dialogVisible = ref(false)
 const changeuserinfo = ref(false)
 
-// 获取用户信息
-const id = ref('');
-const loginName = ref('');
-const age = ref('');
-const phone = ref('');
-const email = ref('');
-const gender = ref('');
-const author = ref('');
-const createTime = ref('');
-const updateTime = ref('');
-const avatar = ref('');
 const router = useRouter();
-onMounted(() => {
-  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  // 获取用户id信息
-  if (loginUser && loginUser.id) {
-    id.value = loginUser.id;
-  }
-  // 获取用户名信息
-  if (loginUser && loginUser.username) {
-    loginName.value = loginUser.username;
-  }
-  // 获取用户头像信息
-  if (loginUser && loginUser.avatar) {
-    avatar.value = loginUser.avatar;
-  }
-  // 获取用户年龄信息
-  if (loginUser && loginUser.age) {
-    age.value = loginUser.age;
-  }
-  // 获取用户手机信息
-  if (loginUser && loginUser.phone) {
-    phone.value = loginUser.phone;
-  }
-  // 获取用户邮箱信息
-  if (loginUser && loginUser.email) {
-    email.value = loginUser.email;
-  }
-  // 获取用户类型信息
-  if (loginUser && loginUser.author) {
-    if(loginUser.author === 0){
-      author.value = '超级管理员';
-    }
-    if(loginUser.author === 1){
-      author.value = '普通用户';
-    }
-  }
-  // 获取用户性别信息
-  if (loginUser && loginUser.gender) {
-    if(loginUser.gender === 1){
-      gender.value = '男';
-    }
-    if(loginUser.gender === 2){
-      gender.value = '女';
-    }
-    if(loginUser.gender === 3){
-      gender.value = '未说明性别';
-    }
-    if(loginUser.gender === 4){
-      gender.value = '未知性别';
-    }
-  }
-  // 获取用户创建时间信息
-  if (loginUser && loginUser.createTime) {
-    createTime.value = loginUser.createTime;
-  }
-  // 获取用户修改时间信息
-  if (loginUser && loginUser.updateTime) {
-    updateTime.value = loginUser.updateTime;
-  }
-})
 
-const edit = async (username) => {
-  const result = await getUserinfoByIdApi(id.value);
-  changeuserinfo.value = true;
-  userinfo.value = result.data;
 
+
+const edit = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    changeuserinfo.value = true;
+    userinfo.value = result.data;
+  }
+}
+  const primary = async () => {
+  
+      let result;
+      if (userinfo.value.username) {//修改
+        result = await updateUserinfoApi(userinfo.value);
+      } 
+      if (result && result.code) {//成功
+        ElMessage.success('修改成功');
+        dialogVisible.value = false;
+        search();
+      } else {//失败
+        ElMessage.error(result ? result.msg : '操作失败');
+      }
+    
+  }
+
+
+const userinforef = ref()
+// 保存修改用户信息
+const save = async () => {
+  // 表单校验
+  if (!userinforef.value) return;
+  await userinforef.value.validate(async (valid) => {//valid:是否校验通过 true:通过 false:不通过
+    if (valid) {//通过
+      let result;
+      result = await updateEmpApi(userinfo.value);  
+      if (result.code) {//成功
+        ElMessage.success('保存成功');
+        dialogVisible.value = false;
+        search();
+      } else {//失败
+        ElMessage.error(result.msg);
+      }
+    } else {//不通过
+      ElMessage.error('表单校验不通过');
+    }
+  })
+}
+
+//表单校验规则
+const rules = ref({
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 2, max: 5, message: '用户名长度应在2到5个字符之间', trigger: 'blur' }
+  ],
+  gender: [
+    { required: true, message: '请选择性别', trigger: 'change' }
+  ],
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    /*
+    正则表达式：
+    ^：以什么开头
+    $：以什么结尾
+    [3-9]：匹配3-9之间的数字
+    \d:数字0到9之间
+    {9}:量词
+    */
+    { pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号', trigger: 'blur' }
+  ],
+  email:[
+    { required: true, message: '请输入有效邮箱', trigger: 'blur' },
+    { pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '请输入有效的邮箱', trigger: 'blur' }
+  ],
+  // age: [
+  //   { required: true, message: '请输入年龄', trigger: 'blur' },
+  //   // { type: 'number', message: '年龄必须为数字值', trigger: 'blur' },
+  //   { min: 1, max: 120, message: '年龄在1到120之间', trigger: 'blur' }
+  // ]
+  
+});
+
+//文件上传
+// 图片上传成功后触发
+const handleAvatarSuccess = (response) => {
+  console.log(response);
+  userinfo.value.avatar = response.data;
+}
+// 文件上传之前触发
+const beforeAvatarUpload = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessage.error('只支持上传图片')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 4) {
+    ElMessage.error('只能上传4M以内图片')
+    return false
+  }
+  return true
 }
 
 // 退出登录
@@ -301,7 +356,7 @@ onBeforeUnmount(() => {
 
 
 const search = async () => {
-  const result = await SelectUserInfo(
+  const result = await getUserinfoByIdApi(
     searchForm.value.username,
     searchForm.value.gender,
     searchForm.value.age,
@@ -635,7 +690,7 @@ const clear = () => {}
   font-size: 20px;
 }
 
-.email{
+.create-time{
   font-size: 16px;
   position: fixed;
   top: 47%;
@@ -645,7 +700,7 @@ const clear = () => {}
 
 }
 
-.phone{
+.update-time{
   font-size: 16px;
   position: fixed;
   top: 63%;
@@ -655,12 +710,12 @@ const clear = () => {}
 
 }
 
-.dark-mode .email {
+.dark-mode .update-time {
   color: #ffffff;
   transition: all 1.5s ease;
 
 }
-.dark-mode .phone {
+.dark-mode .create-time {
   color: #ffffff;
   transition: all 1.5s ease;
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mblog.mapper.UserMapper">
+    <select id="selecList">
+        select *
+        from user
+    </select>
+
+        <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">
+            select u_userId as userId, u_username as username, u_password as password
+            from t_user
+            where u_username = #{username}
+        </select>
+
+<!--    <select id="selectIdAndPasswordByUsername" resultType="com.mblog.entry.User">-->
+<!--        select u_userId      as userId,-->
+<!--               u_username    as username,-->
+<!--               u_password    as password,-->
+<!--        from t_user-->
+<!--        where u_username = #{username}-->
+<!--    </select>-->
+    <select id="selectUserinfoById" resultType="com.mblog.entry.User">
+        select u_userId      as userId,
+               u_username    as username,
+               u_password    as password,
+               u_image       as avatar,
+               d_create_time as createTime,
+               d_update_time as updateTime,
+               i_author_type as authorType,
+               u_age         as age,
+               u_phone       as phone,
+               u_email       as email,
+               i_gender_code as gender
+        from t_user
+        where u_userId = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_user
+        (u_username, u_password, u_email, i_gender_code, d_create_time, d_update_time, i_author_type)
+        VALUES (#{username}, #{password}, #{email}, #{gender}, #{createTime}, #{updateTime}, #{authorType});
+    </insert>
+
+    <update id="updateUserinfo">
+        UPDATE t_user
+        <set>
+            <if test="username != null and username != ''">
+                u_username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                u_password = #{password},
+            </if>
+            <if test="email != null and email != ''">
+                u_email = #{email},
+            </if>
+            <if test="gender != null">
+                i_gender_code = #{gender},
+            </if>
+            <if test="updateTime != null">
+                d_update_time = #{updateTime},
+            </if>
+            <if test="authorType != null">
+                i_author_type = #{authorType},
+            </if>
+            <if test="age != null">
+                u_age = #{age},
+            </if>
+            <if test="phone != null and phone != ''">
+                u_phone = #{phone},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                u_image = #{avatar},
+            </if>
+        </set>
+        WHERE u_userId = #{userId}
+    </update>
+
+        </mapper>

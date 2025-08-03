@@ -18,12 +18,12 @@
       <div class="operate">
        <router-link :to="loginUser ? '/userinfo' : '/login'">
         <button class="avatar">
-          <el-avatar :src="avatar ? avatar : one" />
+          <el-avatar :src="userinfo.avatar ? userinfo.avatar : one" />
         </button>
       </router-link>
 
       <a class="loginname">
-        {{ loginName }}
+        {{ userinfo.username }}
       </a>
 
        <a href="javascript:;" @click="logout" class="quit">
@@ -124,6 +124,8 @@ import { useRouter } from 'vue-router'
 // import axios, { Axios } from 'axios';
 import one from '@/assets/1.png'
 import loginUser from '@/router/index';
+import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+
 import {
   ElMessage,
   ElMessageBox,
@@ -151,6 +153,50 @@ const handleOpen = (key, keyPath) => {
 const handleClose = (key, keyPath) => {
   console.log(key, keyPath)
 }
+
+// 已登录时否，获取用户信息
+onMounted(() => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  if (loginUser && loginUser.username) {
+    loginName.value = loginUser.username;
+    id.value = loginUser.id;
+    fetchUserInfo(id.value);
+  }
+})
+// 新增获取用户信息的方法
+const fetchUserInfo = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    userinfo.value = result.data;
+  }
+}
+const userinfo = ref({
+  username: '',
+  gender: '',
+  email: '',
+  phone: '',
+  authorType: '',
+  createTime: '',
+  updateTime: ''
+})
+const search = async () => {
+  const result = await getUserinfoByIdApi(
+    searchForm.value.username,
+    searchForm.value.gender,
+    searchForm.value.age,
+    searchForm.value.authorType,
+    searchForm.value.email,
+    searchForm.value.phone,
+    searchForm.value.authorType,
+    searchForm.value.createTime,
+    searchForm.value.updateTime,
+  );
+}
+
+// 搜索表单对象
+const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
+
+const id = ref('');
 
 
 const loginName = ref('');
@@ -341,10 +387,10 @@ onBeforeUnmount(() => {
 
 .loginname{
   position: absolute;
-  top: 0%;
-  left: 50%;
+  top: 4%;
+  left: 40%;
   width: 100px;
-  transition: all 0.5s ease;
+  transition: all 1.5s ease;
 
 }
 .dark-mode .loginname {
