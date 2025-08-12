@@ -9,13 +9,15 @@
         <router-link to="/home" class="nav-link">首页</router-link>
         <router-link to="/blog" class="nav-link">博客</router-link>
         <router-link to="/author" class="nav-link">作者</router-link>
-        <router-link to="/" class="nav-link">博客</router-link>
+        <router-link to="/digital" class="nav-link">数码</router-link>
         <router-link to="/" class="nav-link">博客</router-link>
       </nav>
 
       <!-- 控制按钮 -->
-      <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
-      
+       <el-switch  @click="toggleDark" v-model="value5" class="change" width="" size="large" inline-prompt active-text="" inactive-text="" 
+       :active-action-icon="Moon" :inactive-action-icon="Sunny"
+        style="--el-switch-on-color: #000;  "
+      />
       <div class="operate">
         
 
@@ -25,9 +27,9 @@
         </button>
       </router-link>
 
-      <a class="loginname">
-        {{ userinfo.username }}
-      </a>
+     <div style="margin-left: 65px; width: 85px;">
+        <span class="loginname">{{ userinfo.username }}</span>
+      </div>
 
        <a href="javascript:;" @click="logout" class="quit">
            {{ loginName ? '退出登录' : '去登录' }} 
@@ -63,6 +65,14 @@ import { useRouter } from 'vue-router'
 import one from '@/assets/1.png'
 import loginUser from '@/router/index';
 import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+import {
+  Document,
+  Menu as IconMenu,
+  Location,
+  Moon,
+  Setting,
+  Sunny,
+} from '@element-plus/icons-vue'
 
 import {
   ElMessage,
@@ -74,7 +84,8 @@ import {
 
 import {
   darkMode,
-  toggleDark
+  toggleDark,
+  value5
 } from '../api/blackAndWhire'
 // 已登录时否，获取用户信息
 onMounted(() => {
@@ -199,7 +210,7 @@ onBeforeUnmount(() => {
   background-color: #ffffff;
   border-radius: 10px;
   margin: 5px;
-  border: 1px solid #656363;
+  border: 1px solid #ffffff;
   transition: all 1.5s ease;
 
 }
@@ -211,22 +222,23 @@ onBeforeUnmount(() => {
 }
 
 .container {
-  /* position: relative; */
+    /* position: relative; */
   position: fixed;
-  top: 5px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.65%;
+  width: 92.65%;
   margin: 0 auto;
   z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #656363;
+  border-radius: 10px ;
+  /* border: 1px solid #656363; */
   backdrop-filter: blur(5px);
     transition: all 1.5s ease;
+
 
 }
 
@@ -249,10 +261,8 @@ onBeforeUnmount(() => {
   gap: 30px;
   justify-content: center;
   transform: translateX(-50%);
-  background-color: rgb(255, 255, 255, 0.7);
   padding: 8px 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 18%;
   left: 50%;
@@ -260,11 +270,7 @@ onBeforeUnmount(() => {
 
 }
 
-.dark-mode .nav {
-  background-color: rgb(0, 0, 0, 0.7);
-  transition: all 1.5s ease;
 
-}
 
 .nav-link {
   text-decoration: none;
@@ -310,10 +316,20 @@ onBeforeUnmount(() => {
 .change {
   position: absolute;
   top: 24%;
-  right: 19.5%;
-  width: 150px;
-  height: 44px;
-  border-radius: 10px;
+  right: 24.5%;
+  transition: all 1.3s ease;
+
+}
+/* 添加自定义切换动画速度 */
+.change :deep(.el-switch__core) {
+  transition-duration: 0.6s; /* 调整为您想要的速度，例如 0.2s */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.change :deep(.el-switch__action) {
+  transition-duration: 0.6s; /* 保持与核心元素一致 */
+  border: 1px solid rgba(0, 0, 0, 0.5);
+
 }
 
 .avatar {
@@ -326,10 +342,9 @@ onBeforeUnmount(() => {
 }
 
 .loginname{
-  position: absolute;
-  top: 4%;
-  left: 40%;
-  width: 100px;
+   display: flex;
+  justify-content: center;
+  width: 100%;
   transition: all 1.5s ease;
 
 

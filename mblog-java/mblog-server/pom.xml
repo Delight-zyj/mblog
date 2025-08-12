@@ -132,6 +132,11 @@
             <version>3.17.0</version>
         </dependency>
 
+<!--        redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 <!--        entry-->
         <dependency>
             <groupId>com.mblog</groupId>

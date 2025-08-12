@@ -9,12 +9,15 @@
         <router-link to="/home" class="nav-link">首页</router-link>
         <router-link to="/blog" class="nav-link">博客</router-link>
         <router-link to="/author" class="nav-link">作者</router-link>
-        <router-link to="/" class="nav-link">博客</router-link>
+        <router-link to="/digital" class="nav-link">数码</router-link>
         <router-link to="/" class="nav-link">博客</router-link>
       </nav>
 
       <!-- 深色模式控制按钮 -->
-      <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
+       <el-switch  @click="toggleDark" v-model="value5" class="change" width="" size="large" inline-prompt active-text="" inactive-text="" 
+       :active-action-icon="Moon" :inactive-action-icon="Sunny"
+        style="--el-switch-on-color: #000;  "
+      />
       
       <div class="operate">
       <router-link :to="loginUser ? '/userinfo' : '/login'">
@@ -23,12 +26,13 @@
         </button>
       </router-link>
 
-      <a class="loginname">
-        {{ userinfo.username }}
-      </a>
+      <div style="margin-left: 65px; width: 85px;">
+        <span class="loginname">{{ userinfo.username }}</span>
+      </div>
+      
 
        <a href="javascript:;" @click="logout" class="quit">
-           {{ loginName ? '退出登录' : '去登录' }} 
+           {{ userinfo.username ? '退出登录' : '去登录' }} 
           </a>
       </div>
     </div>
@@ -39,12 +43,24 @@
 
     <div class="block text-center">
       <el-carousel :interval="4000" type="card" height="610px" style="margin-top: 162px;">
-    <el-carousel-item v-for="(item,index) in carouselImages" :key="index">
-       <img :src="item.src" :alt="item.alt" class="carousel-image" />
-    </el-carousel-item>
-  </el-carousel>
+        <el-carousel-item v-for="(item,index) in carouselImages" :key="index">
+          <img :src="item.src" :alt="item.alt" class="carousel-image" />
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <h3 style="position: absolute; top:213%; left: 30%; font-size: 40px; color: #3bbde9 ;">AI工具</h3>
+    <div class="ai">
+      <a href="https://chat.deepseek.com/"><img style="border: 1px solid #3bbde9; box-shadow: 10px rgb(2, 2, 2); margin: 40px; position: absolute; left: 7%; width: 345px; height: 125px; border-radius: 20px;" src="@/assets/DeepSeek.png"/></a>
+      <a href="https://www.tongyi.com/qianwen/?spm=5176.2810346&code=lapnbfugti&utm_content=se_1017928895&sessionId=857d009ccb8e4707acc3d4d253c4e6e8"><img style="border: 1px solid #B72793; margin: 40px; position: absolute; right: 7%; width: 216px; height: 265px; border-radius: 20px;" src="@/assets/tongyi.png"/></a>
+      <a href="https://www.doubao.com/chat/14870979406839298"><img style=" margin: 40px; position: absolute; top: 27%; left: 7%; width: 270px; height: 250px; border-radius: 20px;" src="@/assets/doubao.png"/></a>
+      <a href="https://yuanbao.tencent.com/chat/naQivTmsDa?yb_channel=3009&yb_dl=js&msclkid=88116d0a094a1bdc05c1059a16a9ddab"><img style="margin: 40px; position: absolute; top: 41.5%; right: 7%; width: 350px; height: 134px; border-radius: 20px;" src="@/assets/tengxun.png"/></a>
+      <a href="https://chatgpt.com/?from=aigc.izzi.cn"><img style="margin: 40px; position: absolute; top: 68.5%; right: 7%; width: 692px; height: 200px; border-radius: 20px;" src="@/assets/gpt.png"/></a>
     </div>
 
+    <h3 style="position: absolute; top:343%; left: 30%; font-size: 40px; color: #3bbde9 ;">快捷链接</h3>
+     <div class="link">
+
+    </div>
     <div >
     <!-- <el-table :data="deptList" border style="" class="blog">
       <el-table-column prop="name" label="部门名称" width="100" align="center" />
@@ -96,7 +112,14 @@ import {
   ElCarouselItem,
   ElNotification
 } from 'element-plus'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import {
+  Document,
+  Menu as IconMenu,
+  Location,
+  Moon,
+  Setting,
+  Sunny,
+} from '@element-plus/icons-vue'
 
 // import {
 //   SelectAllBlog,
@@ -122,7 +145,8 @@ import fifteen from '@/assets/15.png'
 
 import {
   darkMode,
-  toggleDark
+  toggleDark,
+  value5
 } from '../api/blackAndWhire'
 
 const carouselImages = ref([
@@ -157,17 +181,19 @@ const open1 = () => {
 // 页面加载时触发
 // 未登录时，弹出欢迎信息
 onMounted(() => {
-  if(!loginUser){
+  if(!userinfo.value ){
     open1()
   }
 })
 // 已登录时否，获取用户信息
 onMounted(() => {
-  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  if (loginUser && loginUser.username) {
-    loginName.value = loginUser.username;
-    id.value = loginUser.id;
-    fetchUserInfo(id.value);
+   if(userinfo.value ){
+      const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+      if (loginUser && loginUser.username) {
+        loginName.value = loginUser.username;
+        id.value = loginUser.id;
+        fetchUserInfo(id.value);
+      }
   }
 })
 // 新增获取用户信息的方法
@@ -185,7 +211,7 @@ const router = useRouter();
 
 // 退出登录
 const logout = async () => {
-   if (!loginName.value) {
+   if (!userinfo.username) {
     // 未登录，直接跳转登录页
     router.push('/login');
     return;
@@ -266,11 +292,11 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
 
 
 .home {
-  min-height: 1000vh;
+  min-height: 3000px;
   background-color: #ffffff;
   border-radius: 10px;
   margin: 5px;
-  border: 1px solid #656363;
+  border: 1px solid #ffffff;
   transition: all 1.5s ease;
 }
 
@@ -283,18 +309,18 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
 .container {
   /* position: relative; */
   position: fixed;
-  top: 5px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.65%;
+  width: 92.65%;
   margin: 0 auto;
   z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #656363;
+  border-radius: 10px ;
+  /* border: 1px solid #656363; */
   backdrop-filter: blur(5px);
     transition: all 1.5s ease;
 
@@ -319,20 +345,15 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
   gap: 30px;
   justify-content: center;
   transform: translateX(-50%);
-  background-color: rgb(255, 255, 255, 0.7);
   padding: 8px 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 18%;
   left: 50%;
   transition: all 1.5s ease;
 }
 
-.dark-mode .nav {
-  background-color: rgb(0, 0, 0, 0.7);
-  transition: all 1.5s ease;
-}
+
 
 .nav-link {
   text-decoration: none;
@@ -373,12 +394,21 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
 .change {
   position: absolute;
   top: 24%;
-  right: 19.5%;
-  width: 150px;
-  height: 44px;
-  border-radius: 10px;
+  right: 24.5%;
+  transition: all 1.3s ease;
+
+}
+/* 添加自定义切换动画速度 */
+.change :deep(.el-switch__core) {
+  transition-duration: 0.6s; /* 调整为您想要的速度，例如 0.2s */
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+.change :deep(.el-switch__action) {
+  transition-duration: 0.6s; /* 保持与核心元素一致 */
+  border: 1px solid rgba(0, 0, 0, 0.5);
+
+}
 .avatar {
   position: absolute;
   top: 13%;
@@ -389,10 +419,9 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
 }
 
 .loginname{
-  position: absolute;
-  top: 4%;
-  left: 40%;
-  width: 100px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
   transition: all 1.5s ease;
 
 }
@@ -546,6 +575,27 @@ const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType
   background-color: #fffdfd;
   color: #000000;
   transition: all 1.5s ease;
+
+}
+
+.ai{
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 220%;
+  border-radius: 30px;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  backdrop-filter: blur(5px);
+  height: 800px;
+  animation: scale 9s ease-in-out ;
+
+}
+.dark-mode .ai{
+  background-color: #000000;
+  transition: all 1.5s ease;
+  border: 1px solid #ffffff;
+
 
 }
 

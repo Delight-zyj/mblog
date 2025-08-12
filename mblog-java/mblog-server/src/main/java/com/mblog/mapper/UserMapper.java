@@ -2,10 +2,7 @@ package com.mblog.mapper;
 
 import com.mblog.entry.LoginInfo;
 import com.mblog.entry.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -35,4 +32,6 @@ public interface UserMapper {
     void updateUserinfo(User user);
 //    @Select("select * from t_user where u_userId = #{id} ")
     User selectUserinfoById(Long id);
+
+
 }

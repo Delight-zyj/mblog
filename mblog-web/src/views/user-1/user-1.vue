@@ -19,7 +19,9 @@
      <div class="list">
       <router-link to="/userinfo" class="user-0">个人信息</router-link>
       <router-link to="/user-1" class="user-0">个人博客</router-link>
-      <router-link to="/user-2" class="user-0">个人主页</router-link>       
+      <router-link to="/user-2" class="user-0">个人主页2</router-link>    
+      <router-link to="/user-3" class="user-0">个人主页3</router-link>       
+
       </div>
 
       <div class="list-right-top">
@@ -115,7 +117,7 @@
       <el-row :gutter="20">
         <el-col :span="3"></el-col>
         <el-col :span="12">
-          <el-form-item label="头像">
+          <el-form-item label="&nbsp;&nbsp;&nbsp;头像">
             <el-upload class="avatar-uploader" action="/api/upload" :headers="{'token': token}" :show-file-list="false"
               :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
               <img v-if="userinfo.avatar" :src="userinfo.avatar" class="change-avatar" />
@@ -132,7 +134,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="changeuserinfo = false">退出</el-button>
-        <el-button type="primary" @click="primary">
+        <el-button type="primary" @click="save">
           提交
         </el-button>
       </div>
@@ -179,7 +181,7 @@ import {
 } from '../api/blackAndWhire'
 
 // 页面加载时触发
- const id = ref('');
+const id = ref('');
 onMounted(() => {
    const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   // 获取用户id信息
@@ -202,7 +204,6 @@ const genders = ref([{ name: '男', value: 1 }, { name: '女', value: 2 },{ name
 // 用户类型列表数据
 const authorTypes = ref([{ name: '超级管理员', value: 0 }, { name: '普通用户', value: 1 }])
 
-const dialogVisible = ref(false)
 const changeuserinfo = ref(false)
 
 const router = useRouter();
@@ -216,21 +217,20 @@ const edit = async (id) => {
     userinfo.value = result.data;
   }
 }
-  const primary = async () => {
-  
-      let result;
-      if (userinfo.value.username) {//修改
-        result = await updateUserinfoApi(userinfo.value);
-      } 
-      if (result && result.code) {//成功
-        ElMessage.success('修改成功');
-        dialogVisible.value = false;
-        search();
-      } else {//失败
-        ElMessage.error(result ? result.msg : '操作失败');
-      }
+  // const primary = async () => {
+  //     let result;
+  //     if (userinfo.value.username) {//修改
+  //       result = await updateUserinfoApi(userinfo.value);
+  //     } 
+  //     if (result && result.code) {//成功
+  //       ElMessage.success('修改成功');
+  //       dialogVisible.value = false;
+  //       search();
+  //     } else {//失败
+  //       ElMessage.error(result ? result.msg : '操作失败');
+  //     }
     
-  }
+  // }
 
 
 const userinforef = ref()
@@ -241,11 +241,11 @@ const save = async () => {
   await userinforef.value.validate(async (valid) => {//valid:是否校验通过 true:通过 false:不通过
     if (valid) {//通过
       let result;
-      result = await updateEmpApi(userinfo.value);  
+      result = await updateUserinfoApi(userinfo.value);  
       if (result.code) {//成功
         ElMessage.success('保存成功');
-        dialogVisible.value = false;
-        search();
+        changeuserinfo.value = false;
+        // search();
       } else {//失败
         ElMessage.error(result.msg);
       }
@@ -292,7 +292,7 @@ const rules = ref({
 // 图片上传成功后触发
 const handleAvatarSuccess = (response) => {
   console.log(response);
-  userinfo.value.image = response.data;
+  userinfo.value.avatar = response.data;
 }
 // 文件上传之前触发
 const beforeAvatarUpload = (rawFile) => {
@@ -355,19 +355,6 @@ onBeforeUnmount(() => {
 })
 
 
-const search = async () => {
-  const result = await getUserinfoByIdApi(
-    searchForm.value.username,
-    searchForm.value.gender,
-    searchForm.value.age,
-    searchForm.value.authorType,
-    searchForm.value.email,
-    searchForm.value.phone,
-    searchForm.value.authorType,
-    searchForm.value.createTime,
-    searchForm.value.updateTime,
-  );
-}
 
 // 搜索表单对象
 const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
@@ -417,20 +404,20 @@ const clear = () => {}
 .container {
   /* position: relative; */
   position: fixed;
-  top: 5px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 96.65%;
+  width: 92.65%;
   margin: 0 auto;
-  z-index: 2;
+  z-index: 9999;
   background-color: rgb(255, 255, 255, 0.5);
   padding: 10px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #656363;
+  border-radius: 10px ;
+  /* border: 1px solid #656363; */
   backdrop-filter: blur(5px);
-  transition: all 1.5s ease;
+    transition: all 1.5s ease;
 
 }
 
@@ -513,7 +500,7 @@ const clear = () => {}
   transition: all 1.5s ease;
 }
 .list{
-  margin-top: 120px; 
+  margin-top: 140px; 
   width: 265px;
   min-height: 1000px;
   background-color: rgb(255, 255, 255, 0.5);
@@ -578,7 +565,7 @@ const clear = () => {}
 
 
 .list-right-top{
-    margin-top: 120px; 
+    margin-top: 140px; 
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
     border-radius: 7px 40px 7px 7px;
@@ -602,7 +589,7 @@ const clear = () => {}
 
 }
 .list-right-bottom{
-     margin-top: 400px; 
+     margin-top: 420px; 
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
     border-radius: 7px 7px 40px 7px;

@@ -1,6 +1,7 @@
-com\mblog\entry\BlogInfo.class
-com\mblog\entry\CreateInfo.class
+com\mblog\entry\BlogType.class
 com\mblog\entry\Result.class
 com\mblog\entry\User.class
+com\mblog\entry\BlogInfo.class
+com\mblog\entry\CreateInfo.class
 com\mblog\entry\Comment.class
 com\mblog\entry\LoginInfo.class

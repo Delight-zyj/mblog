@@ -2,28 +2,40 @@ package com.mblog.config;
 
 
 import com.mblog.interceptor.TokenInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 配置类
  */
-@Configuration
-public class WebConFig implements WebMvcConfigurer {
+@Slf4j
+//@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    public WebConfig(){
+        log.info("✅ WebConfig 已加载！");
+    }
 
     @Autowired
     private TokenInterceptor tokenInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/userinfo/**");
+    }
 
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(tokenInterceptor);
         // 解密
-/*        registry.addInterceptor(rsaDecryptInterceptor)
-                .addPathPatterns("/**")
-                .order(1);*/
+//        registry.addInterceptor(rsaDecryptInterceptor)
+//                .addPathPatterns("/**")
+//                .order(1);
 
 //        registry.addInterceptor(tokenInterceptor)
 //                .addPathPatterns("/userinfo/**", "/userinfo")

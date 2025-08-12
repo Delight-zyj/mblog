@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+import { ElMessage } from 'element-plus';
 import HomeView from '../views/home/home.vue';
 import pageLogin from '../views/login/pageLogin.vue';
 import notFind from '../views/404/404.vue';
@@ -10,6 +12,7 @@ import userinfo from '../views/userinfo/userinfo.vue';
 import user1 from '../views/user-1/user-1.vue';
 import user2 from '../views/user-2/user-2.vue';
 import user3 from '../views/user-3/user-3.vue';
+import digital from '../views/digital/digital.vue'
 
 const routes = [
    {
@@ -28,6 +31,7 @@ const routes = [
   { path: '/user-1', name: 'user1', component: user1, },
   { path: '/user-2', name: 'user2', component: user2, },
   { path: '/user-3', name: 'user3', component: user3, },
+  { path: '/digital', name: 'digital', component: digital, },
 ];
 
 const router = createRouter({
@@ -38,12 +42,18 @@ const router = createRouter({
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
   const loginUser = localStorage.getItem('loginUser'); // 或从 Vuex 获取登录状态
-  const requireAuth = ['/userinfo']; // 需要登录的页面
 
+
+
+
+
+  const requireAuth = ['/userinfo']; // 需要登录的页面
+console.log('loginUser', loginUser);
   if (requireAuth.includes(to.path)) {
     if (loginUser) {
       next(); // 已登录，允许访问
     } else {
+      ElMessage.error('请先登录');
       next('/login'); // 未登录，跳转登录页
     }
   } else {
@@ -51,4 +61,13 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+const fetchUserInfo = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    next(); // 已登录，允许访问
+  }else{
+    ElMessage.error('请先登录');
+      next('/login'); // 未登录，跳转登录页
+  }
+}
 export default router;

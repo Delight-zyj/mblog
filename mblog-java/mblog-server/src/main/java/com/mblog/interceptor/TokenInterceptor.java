@@ -11,16 +11,25 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * 令牌校验拦截器
  */
 @Slf4j
-@Component
+//@Component
 public class TokenInterceptor implements HandlerInterceptor {
+
+    public TokenInterceptor() {
+        log.info("✅ TokenInterceptor 已创建！");
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        log.info("🌀 进入拦截器！请求路径: {}", request.getRequestURI());
+
+
         //1、获取请求路径
         String path = request.getRequestURI();
         log.info("拦截到请求: {}", path);
 
         //2、判断是否是userinfo相关请求（这部分判断其实可以省略，因为配置已经限制了路径）
-        if (path.startsWith("/userinfo")) {
+        if (path.contains("/userinfo")) {
             log.info("检测到/userinfo请求，开始验证token: {}", path);
 
             //3、获取请求头中的token
@@ -28,6 +37,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
             //4、判断token是否存在
             if (token == null || token.isEmpty()) {
+                log.info("拦截器触发");
                 log.info("令牌为空，响应401");
                 response.setStatus(401);
                 return false;

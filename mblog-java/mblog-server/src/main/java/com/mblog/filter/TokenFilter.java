@@ -8,6 +8,8 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.stereotype.Component;
 
 
 import java.io.IOException;
@@ -15,30 +17,37 @@ import java.io.IOException;
 /**
  * token拦截器
  * 用于拦截所以没有登录的请求，去检验是否有token，如果没有则返回登录界面
- * 此类为全局过滤器，所有请求都会经过此过滤器
- * 当前该拦截器还未发挥作用，因为我想做一个不用登录也可以访问的网页，只是不能访问个人信息等页面，放在这里想做如果以后用的话再说
+ * 此类为全局过滤器，所有请求都会经过此过滤器（get、post等）
+ * 当前该拦截器还未发挥作用，但已经注册，因为我想做一个不用登录也可以访问的网页，只是不能访问个人信息等页面，放在这里想做如果以后用的话再说
  */
 @Slf4j
-@WebFilter(urlPatterns = {"/userinfo/*", "/userinfo"})
+//@Component
+//@WebFilter(urlPatterns = {"/userinfo/*", "/userinfo"})
 public class TokenFilter implements Filter {
+
+    public TokenFilter() {
+        log.info("✅ TokenFilter初始化");
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest requestZ = (HttpServletRequest) request;
         HttpServletResponse responseZ = (HttpServletResponse) response;
         //1、获取请求路径
-        String path = requestZ.getRequestURI();// /login
+        String path = requestZ.getRequestURI();
 
-        //2、判断是否是登录请求，如果路径包含/login，说明是登录请求，放行
-        if (!path.contains("userinfo")) {
+        //2、判断是否是/userinfo开头的请求，如果不是则放行
+        if (!path.contains("/userinfo")) {
             log.info("登录请求，放行");
             chain.doFilter(request, response);
             return;
         }
-        //3、获取请求头中的token
+        //3、如果是/userinfo，获取请求头中的token
         String token = requestZ.getHeader("token");
 
         //4、判断token是否为存在，如果为不存在，说明未登录，拦截到登录页，返回状态码（401）
         if (token == null || token.isEmpty()) {
+            log.info("过滤器触发");
             log.info("令牌为空，响应401");
             responseZ.setStatus(401);
             return;
@@ -48,7 +57,7 @@ public class TokenFilter implements Filter {
             Claims claims = JwtUtils.parseJWT(token);
             Integer empId = Integer.valueOf(claims.get("id").toString());
             CurrentHolder.setCurrentId(empId);
-            log.info("当前登录的员工id是：{}，将其存入ThreadLocal",empId);
+            log.info("当前登录的员工id是：{}，将其存入ThreadLocal", empId);
         } catch (Exception e) {
             log.info("令牌非法，响应401");
             responseZ.setStatus(401);

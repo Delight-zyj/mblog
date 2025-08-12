@@ -23,11 +23,13 @@ public class UserController {
         return Result.success(user);
     }
 
-    @PutMapping({"/userinfo","/user-1","/user-2"})
-    public Result updateUserinfo(@RequestBody User user) {
+
+    @PutMapping({"/userinfo","/user-1","/user-2","/user-3"})
+    public Result updateUserinfo1(@RequestBody User user) {
         userService.updateUserinfo(user);
         return Result.success();
     }
+
 
 
 

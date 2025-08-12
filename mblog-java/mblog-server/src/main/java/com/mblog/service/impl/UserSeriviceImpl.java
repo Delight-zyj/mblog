@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -50,6 +52,7 @@ public class UserSeriviceImpl implements UserService {
             return new LoginInfo(-2L, "用户名或密码错误", null);
         }
 
+
         // 获取用户头像
         u.setAvatar(userMapper.selectAvatarByUsername(username));
 
@@ -67,6 +70,7 @@ public class UserSeriviceImpl implements UserService {
         return null;
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public User create(CreateInfo createInfo) {
         // 判断创建用户名是否已经存在

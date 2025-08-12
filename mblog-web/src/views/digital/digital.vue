@@ -29,26 +29,96 @@
         <span class="loginname">{{ userinfo.username }}</span>
       </div>
        <a href="javascript:;" @click="logout" class="quit">
-           {{ loginName ? '退出登录' : '去登录' }} 
+           {{ userinfo.username ? '退出登录' : '去登录' }} 
           </a>
       </div>
     </div>
-    <el-col :span="12"  class="type">
-     
-        <p>类型1</p>
-        <el-select class="type-1" placement="right-start" clearable></el-select>
-    
-     
-        <p>类型2</p>
-        <!-- <el-cascader class="type-1" :options="options" :props="props2" placement="right-start" clearable /> -->
-   
-     
-        <p>类型3</p>
-        <!-- <el-cascader class="type-1" :options="options" :props="props2" placement="right-start" clearable /> -->
-    
-    
-    </el-col>
+
+<el-form :inline="true" :model="searchDigita" class="el-form-1">
+      <el-form-item label="型号">
+        <el-input style="width: 235px; margin-bottom: 10px;" v-model="searchDigita.digitalname" placeholder="请输入型号" clearable />
+      </el-form-item>
+      <el-form-item label="类型">
+  
+        <el-select style="width: 235px; margin-bottom: 10px; border-radius: 20px !important;" v-model="searchDigita.type" placeholder="请选择类型" placement="right-start" clearable>
+          <el-option label="手机" value="1" />
+          <el-option label="平板" value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="品牌">
+        <el-select style="width: 235px; color: #000;" v-model="searchDigita.digitalbrand" placeholder="请选择品牌" placement="right-start" clearable>
+          <el-option label="手机" value="1" />
+          <el-option label="平板" value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="发布时间">
+        <br/>
+        <el-date-picker class="el-date-picker" style="margin-left: -70px; width: 286px;" v-model="searchDigita.release_time" type="daterange" range-separator="到" start-placeholder="开始日期"
+          end-placeholder="结束日期" value-format="YYYY-MM-DD" />
+      </el-form-item>
+      <el-form-item label="价格区间" style="color: black;" class="price">
+        <br/>
+      <el-input-number v-model="searchDigita.min" controls-position="right" style="width: 300px; margin-left: -70px;" :precision="2" :step="100" step-strictly>
+        <template #decrease-icon><el-icon><Minus /></el-icon></template>
+        <template #increase-icon><el-icon><Plus /></el-icon></template>
+      </el-input-number>    
+        <!-- <span style="width: 300px; margin-left: -70px; color: #1989fa;">到</span> -->
+        <br/>
+
+       <el-input-number v-model="searchDigita.max" controls-position="right" style="width: 300px; margin-left: -70px;" :precision="2" :step="100" step-strictly>
+        <template #decrease-icon><el-icon><Minus /></el-icon></template>
+        <template #increase-icon><el-icon><Plus /></el-icon></template>
+      </el-input-number>
+      </el-form-item>
+      <el-form-item>
+        <el-button style="margin-left: 60px;" type="primary" @click="search1">查询</el-button>
+        <el-button type="info" @click="clear1">清空</el-button>
+      </el-form-item>
+    </el-form>
+
+    <div class="" style="margin: 200px 30px 20px 400px; width: 1073px;">
+    <el-table :data="digitalList" border style="width: 100%">
+      <el-table-column prop="digitalname" label="型号" width="120" align="center" />
+      <el-table-column prop="digitalbrand" label="品牌" width="60" align="center">
+        <template #default="scope">
+          {{ scope.row.gender == 1 ? '男' : '女' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="type" label="类型" width="60" align="center">
+        <template #default="scope">
+          {{ scope.row.type == 1 ? '手机' : '平板' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="digitalimage" label="图片" width="120" align="center">
+        <template #default="scope">
+          <img :src="scope.row.image" height="40px" />
+        </template>
+      </el-table-column>/>
+      <el-table-column prop="digitalsoc" label="处理器型号" width="120" align="center" />
+      <el-table-column prop="digitalprice" label="发售价格" width="113" align="center" />
+      <el-table-column prop="digitalbattery" label="电池容量（mAh）" width="120" align="center" />
+      <el-table-column prop="releaseTime" label="发布时间" width="120" align="center" />
+      <el-table-column label="操作" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="edit(scope.row.id)">查看详细参数</el-button>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="操作" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="edit(scope.row.id)">编辑</el-button>
+          <el-button type="danger" size="small" @click="deleteById(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column> -->
+    </el-table>
   </div>
+ 
+  </div>
+  <el-dialog v-model="digitalinfo" title="详细信息">
+    <el-form :model="digital">
+
+    </el-form>
+
+  </el-dialog>
   <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
     <div
       style="
@@ -70,13 +140,12 @@
 </template>
 
 <script setup>
-// import { ElButton } from 'element-plus'
-import { ref, onMounted,onBeforeUnmount } from 'vue'
+import { ref, onMounted,onBeforeUnmount,watch } from 'vue'
 import { useRouter } from 'vue-router'
-// import axios, { Axios } from 'axios';
 import one from '@/assets/1.png'
 import loginUser from '@/router/index';
 import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
+import { getDigitalList } from'@/views/api/digital.js'
 import {
   ElMessage,
   ElMessageBox,
@@ -84,7 +153,6 @@ import {
   ElCarousel,
   ElCarouselItem
 } from 'element-plus'
-
 
 import {
   Document,
@@ -95,31 +163,26 @@ import {
   Sunny,
 } from '@element-plus/icons-vue'
 
+
 import {
   darkMode,
   toggleDark,
   value5
 } from '../api/blackAndWhire'
 
-const isCollapse = ref(true)
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
-}
 
 // 已登录时否，获取用户信息
 onMounted(() => {
+  search1()
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   if (loginUser && loginUser.username) {
     loginName.value = loginUser.username;
     id.value = loginUser.id;
-    fetchUserInfo(id.value);
+    getUserInfo(id.value);
   }
 })
 // 新增获取用户信息的方法
-const fetchUserInfo = async (id) => {
+const getUserInfo = async (id) => {
   const result = await getUserinfoByIdApi(id);
   if (result.code) {
     userinfo.value = result.data;
@@ -134,47 +197,73 @@ const userinfo = ref({
   createTime: '',
   updateTime: ''
 })
-const search = async () => {
-  const result = await getUserinfoByIdApi(
-    searchForm.value.username,
-    searchForm.value.gender,
-    searchForm.value.age,
-    searchForm.value.authorType,
-    searchForm.value.email,
-    searchForm.value.phone,
-    searchForm.value.authorType,
-    searchForm.value.createTime,
-    searchForm.value.updateTime,
+
+const search1 = async () => {
+ 
+  
+  const result = await getDigitalList(
+    searchDigita.value.digitalname,
+    searchDigita.value.digitalbrand,
+    searchDigita.value.type,
+    searchDigita.value.begin,
+    searchDigita.value.end,
+    searchDigita.value.max,
+    searchDigita.value.min,
   );
+  if(result.code){
+    digitalList.value = result.data;
+  }
+ 
 }
 
-// 搜索表单对象
+// 搜索digital对象清理
+const clear1 = () => {
+  searchDigita.value = { digitalname: '' ,digitalbrand: '',type: '',release_time: [],begin: '',end: '',max: '',min: '' }
+}
+// 搜索userinfo对象
 const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
 
 const id = ref('');
 
+// 数码列表数据
+const digitalList = ref([{}])
+
+const searchDigita = ref({ digitalname: '' ,digitalbrand: '',type: '',release_time: [],begin: '',end: '',max: '',min: ''})
+// 发布时间监听
+watch(() => { return searchDigita.value.release_time }, (newVal, oldVal) => {
+  if (newVal.length == 2) {
+    searchDigita.value.begin = newVal[0];
+    searchDigita.value.end = newVal[1];
+  } else {
+    searchDigita.value.begin = '';
+    searchDigita.value.end = '';
+  }
+})
 
 const loginName = ref('');
-const avatar = ref('');
 const router = useRouter();
-// 钩子函数(获取用户名信息)
+// 已登录时否，获取用户信息
 onMounted(() => {
-  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  if (loginUser && loginUser.username) {
-    loginName.value = loginUser.username;
+   if(userinfo.value ){
+      const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+      if (loginUser && loginUser.username) {
+        loginName.value = loginUser.username;
+        id.value = loginUser.id;
+        fetchUserInfo(id.value);
+      }
   }
 })
-// 获取用户头像
-onMounted(() => {
-  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  if (loginUser && loginUser.avatar) {
-    avatar.value = loginUser.avatar;
+// 新增获取用户信息的方法
+const fetchUserInfo = async (id) => {
+  const result = await getUserinfoByIdApi(id);
+  if (result.code) {
+    userinfo.value = result.data;
   }
-})
+}
 
 // 退出登录
 const logout = async () => {
-   if (!loginName.value) {
+   if (!userinfo.username) {
     // 未登录，直接跳转登录页
     router.push('/login');
     return;
@@ -184,19 +273,9 @@ const logout = async () => {
     { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }
   ).then(async () => {
     ElMessage.success('退出成功');
-    // // 检查是否记住密码
-    // const rememberMeValue = JSON.parse(localStorage.getItem('rememberMeValue') || 'false')
-    
-    // if(!rememberMeValue){
-    //     // 如果没有记住密码，清除登录信息
-    //     localStorage.removeItem('loginUser');
-    // }
-
- // 跳转页面
+    // 跳转页面
     router.push('/login');
-
     handlePageHide();
-   
   }).catch(() => {
     ElMessage.info({
     message: '您已取消退出'
@@ -225,6 +304,8 @@ onBeforeUnmount(() => {
 })
 
 
+const digitalinfo = ref(false)
+const digital = ref({})
 
 
 
@@ -323,13 +404,13 @@ const props2 = ref({
   gap: 30px;
   justify-content: center;
   transform: translateX(-50%);
+  background-color: none;
   padding: 8px 16px;
   border-radius: 8px;
   position: absolute;
   top: 18%;
   left: 50%;
 }
-
 
 .nav-link {
   text-decoration: none;
@@ -373,12 +454,12 @@ const props2 = ref({
 }
 /* 添加自定义切换动画速度 */
 .change :deep(.el-switch__core) {
-  transition-duration: 0.6s; /* 调整为您想要的速度，例如 0.2s */
+  transition-duration: 0.6s;
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .change :deep(.el-switch__action) {
-  transition-duration: 0.6s; /* 保持与核心元素一致 */
+  transition-duration: 0.6s; 
   border: 1px solid rgba(0, 0, 0, 0.5);
 
 }
@@ -478,9 +559,66 @@ const props2 = ref({
   border: 1px solid #676767;
 }
 
+.el-form-1{
+  position: fixed;
+  left: 8%;
+  transform: translateX(-50%);
+  width: 260px;
+  z-index: 9999;
+  margin: 200px 0 0 5%;
+  background-color: #ffffff;
+  padding: 10px;
+  /* border-radius: 10px; */
+
+}
+.dark-mode .el-form-1{
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* .el-input:deep(.el-input__wrapper) */
+
+.el-input:deep(.el-input__wrapper) {
+  border-radius: 25px;
+  background-color: #ffffff;
+  outline: none;
+  border: 0;
+    transition: all 1.5s ease;
+
+}
+.dark-mode .el-input:deep(.el-input__wrapper) { 
+  background-color: #020202;
+   transition: all 1.5s ease;
 
 
+}
+.el-select:deep(.el-select__wrapper) {
+  border-radius: 25px;
+  background-color: #ffffff;
+  outline: none;
+  border: 0;
+  transition: all 1.5s ease;
 
+}
+.dark-mode .el-select:deep(.el-select__wrapper) { 
+  background-color: #000000;
+  transition: all 1.5s ease
+
+}
+/* .dark-mode .el-select::v-deep(.el-select-dropdown__item) { 
+  background-color: #0a0909;
+  color: #000000;
+} */
+
+/* 使用更具体的选择器 */
+:deep body.dark-mode .el-select-dropdown__list .el-select-dropdown__item {
+  background-color: #404040 !important;
+  color: white !important;
+}
+
+:deep body.dark-mode .el-select-dropdown__list .el-select-dropdown__item:hover {
+  background-color: #606060 !important;
+}
 
 
 

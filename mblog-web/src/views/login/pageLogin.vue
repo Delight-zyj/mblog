@@ -199,7 +199,6 @@ onMounted(() => {
 .input-i {
   width: 300px;
   height: 40px;
-  /* padding: 0 15px; */
 }
 
 .el-input:deep(.el-input__wrapper) {
@@ -207,7 +206,6 @@ onMounted(() => {
   background-color: #fff;
   outline: none;
   border: 0;
-  /* box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); */
 }
 
 .custom-radius .input-i {
