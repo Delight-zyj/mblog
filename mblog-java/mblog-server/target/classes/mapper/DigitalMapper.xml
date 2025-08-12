@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mblog.mapper.DigitalMapper">
+
+
+    <select id="selectAll" resultType="com.mblog.entry.Digital">
+        select digitalId, digitalname, digitalbrand, digitalimg, digitalsoc, release_time, digitalprice, digitalscreen, digitalbattery, digitalcamera, type from phone
+        <where>
+            <if test="digitalname != null and digitalname != ''">
+                phone.digitalname like concat('%',#{digitalname},'%')
+            </if>
+            <if test="digitalbrand != null and digitalbrand != ''">
+                and phone.digitalbrand = #{digitalbrand}
+            </if>
+            <if test="type != null">
+                and phone.type = #{type}
+            </if>
+            <if test="begin != null and end != null">
+                and phone.release_time between #{begin} and #{end}
+            </if>
+            <if test="max != 0.0 and min != 0.0">
+                and phone.digitalprice between #{min} and #{max}
+            </if>
+        </where>
+    </select>
+</mapper>
