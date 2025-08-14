@@ -47,28 +47,37 @@
       </el-form-item>
       <el-form-item label="品牌">
         <el-select style="width: 235px; color: #000;" v-model="searchDigita.digitalbrand" placeholder="请选择品牌" placement="right-start" clearable>
-          <el-option label="手机" value="1" />
-          <el-option label="平板" value="2" />
+          <el-option label="小米" value="1" />
+          <el-option label="华为" value="2" />
+          <el-option label="OPPO" value="3" />
+          <el-option label="vivo" value="4" />
+          <el-option label="苹果" value="5" />
         </el-select>
       </el-form-item>
-      <el-form-item label="发布时间">
-        <br/>
+        <el-form-item label="发布时间">
+          <br/>
         <el-date-picker class="el-date-picker" style="margin-left: -70px; width: 286px;" v-model="searchDigita.release_time" type="daterange" range-separator="到" start-placeholder="开始日期"
           end-placeholder="结束日期" value-format="YYYY-MM-DD" />
       </el-form-item>
+   
+      
       <el-form-item label="价格区间" style="color: black;" class="price">
         <br/>
-      <el-input-number v-model="searchDigita.min" controls-position="right" style="width: 300px; margin-left: -70px;" :precision="2" :step="100" step-strictly>
+        <!-- <div style="width: 300px; margin-left: -70px;"> -->
+           <!-- <el-input-number v-model="searchDigita.min" controls-position="right"  :precision="2" :step="100" step-strictly>
         <template #decrease-icon><el-icon><Minus /></el-icon></template>
         <template #increase-icon><el-icon><Plus /></el-icon></template>
       </el-input-number>    
-        <!-- <span style="width: 300px; margin-left: -70px; color: #1989fa;">到</span> -->
         <br/>
-
-       <el-input-number v-model="searchDigita.max" controls-position="right" style="width: 300px; margin-left: -70px;" :precision="2" :step="100" step-strictly>
+       <el-input-number v-model="searchDigita.max" controls-position="right"  :precision="2" :step="100" step-strictly>
         <template #decrease-icon><el-icon><Minus /></el-icon></template>
         <template #increase-icon><el-icon><Plus /></el-icon></template>
-      </el-input-number>
+      </el-input-number> -->
+      <el-input v-model="searchDigita.min" type="number" placeholder="请输入最低价格"  :precision="2" style="width: 310px; margin-left: -70px;"/>
+      <br/>
+      <el-input v-model="searchDigita.max" type="number" placeholder="请输入最高价格"  :precision="2" style="width: 300px; margin-left: -70px;"/>
+        <!-- </div> -->
+     
       </el-form-item>
       <el-form-item>
         <el-button style="margin-left: 60px;" type="primary" @click="search1">查询</el-button>
@@ -78,10 +87,15 @@
 
     <div class="" style="margin: 200px 30px 20px 400px; width: 1073px;">
     <el-table :data="digitalList" border style="width: 100%">
+      <el-table-column type="index" prop="digitalId" label="序号" width="60" align="center" />
       <el-table-column prop="digitalname" label="型号" width="120" align="center" />
       <el-table-column prop="digitalbrand" label="品牌" width="60" align="center">
-        <template #default="scope">
-          {{ scope.row.gender == 1 ? '男' : '女' }}
+         <template #default="scope">
+          <span v-if="scope.row.digitalbrand == 1">小米</span>
+          <span v-if="scope.row.digitalbrand == 2">华为</span>
+          <span v-if="scope.row.digitalbrand == 3">OPPO</span>
+          <span v-if="scope.row.digitalbrand == 4">vivo</span>
+          <span v-if="scope.row.digitalbrand == 5">苹果</span>
         </template>
       </el-table-column>
       <el-table-column prop="type" label="类型" width="60" align="center">
@@ -100,7 +114,7 @@
       <el-table-column prop="releaseTime" label="发布时间" width="120" align="center" />
       <el-table-column label="操作" align="center">
         <template #default="scope">
-          <el-button type="primary" size="small" @click="edit(scope.row.id)">查看详细参数</el-button>
+          <el-button type="primary" size="small" @click="select(scope.row.digitalId)">查看详细参数</el-button>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" align="center">
@@ -114,9 +128,7 @@
  
   </div>
   <el-dialog v-model="digitalinfo" title="详细信息">
-    <el-form :model="digital">
-
-    </el-form>
+    
 
   </el-dialog>
   <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
@@ -145,7 +157,7 @@ import { useRouter } from 'vue-router'
 import one from '@/assets/1.png'
 import loginUser from '@/router/index';
 import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
-import { getDigitalList } from'@/views/api/digital.js'
+import { getDigitalList,getDigitalById } from'@/views/api/digital.js'
 import {
   ElMessage,
   ElMessageBox,
@@ -306,6 +318,14 @@ onBeforeUnmount(() => {
 
 const digitalinfo = ref(false)
 const digital = ref({})
+
+const select = async (digitalId) =>{
+  const result = await getDigitalById(digitalId);
+  if (result.code) {
+    digital.value = result.data;
+    digitalinfo.value = true;
+  }
+}
 
 
 
@@ -566,17 +586,12 @@ const props2 = ref({
   width: 260px;
   z-index: 9999;
   margin: 200px 0 0 5%;
-  background-color: #ffffff;
+  background-color: none;
   padding: 10px;
   /* border-radius: 10px; */
 
 }
-.dark-mode .el-form-1{
-  background-color: #000000;
-  color: #ffffff;
-}
 
-/* .el-input:deep(.el-input__wrapper) */
 
 .el-input:deep(.el-input__wrapper) {
   border-radius: 25px;
@@ -605,20 +620,30 @@ const props2 = ref({
   transition: all 1.5s ease
 
 }
-/* .dark-mode .el-select::v-deep(.el-select-dropdown__item) { 
-  background-color: #0a0909;
-  color: #000000;
+
+
+
+
+.dark-mode .el-date-picker:deep(.el-range-editor.el-input__wrapper) {
+  background-color: #864747 !important;
+  border-radius: 25px;
+}
+
+:deep(.dark-mode.el-range-editor.el-input__wrapper) {
+  background-color: #864747 !important;
+  border-radius: 25px;
+}
+ /* .dark-mode .el-date-picker :deep( .el-range-editor) {
+  background-color: #864747 !important;
+  border-radius: 25px;
+
+} */
+/* :deep(.el-range-editor.el-input__wrapper) {
+  background-color: #864747 !important;
+  border-radius: 25px;
 } */
 
-/* 使用更具体的选择器 */
-:deep body.dark-mode .el-select-dropdown__list .el-select-dropdown__item {
-  background-color: #404040 !important;
-  color: white !important;
-}
 
-:deep body.dark-mode .el-select-dropdown__list .el-select-dropdown__item:hover {
-  background-color: #606060 !important;
-}
 
 
 
