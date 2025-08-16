@@ -9,12 +9,15 @@
         <router-link to="/home" class="nav-link">首页</router-link>
         <router-link to="/blog" class="nav-link">博客</router-link>
         <router-link to="/author" class="nav-link">作者</router-link>
-        <router-link to="/" class="nav-link">博客</router-link>
+        <router-link to="/digital" class="nav-link">数码</router-link>
         <router-link to="/" class="nav-link">博客</router-link>
       </nav>
 
       <!-- 控制按钮 -->
-      <el-button @click="toggleDark" class="change">切换深色/浅色模式</el-button>
+       <el-switch  @click="toggleDark" v-model="value5" class="change" width="" size="large" inline-prompt active-text="" inactive-text="" 
+       :active-action-icon="Moon" :inactive-action-icon="Sunny"
+        style="--el-switch-on-color: #000;  "
+      />
     </div>
      <div class="list">
       <router-link to="/userinfo" class="user-0">个人信息</router-link>
@@ -90,28 +93,7 @@
         </el-col>    
       </el-row>
 
-      <!-- <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="年龄&nbsp;&nbsp;&nbsp;&nbsp;" prop="age">
-            <el-input v-model="userinfo.age" placeholder="请输入年龄"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-      <!-- 第五行 -->
-      <!-- <el-row :gutter="20">
-        <el-col :span="3"></el-col>
-        <el-col :span="12">
-          <el-form-item label="最近修改日期">
-            <el-date-picker v-model="userinfo.updateTime" type="date" style="width: 100%;" placeholder="选择日期"
-              format="YYYY-MM-DD" value-format="YYYY-MM-DD" disabled></el-date-picker>
-          </el-form-item>
-          <el-form-item label="注册日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
-            <el-date-picker v-model="userinfo.createTime" type="date" style="width: 100%;" placeholder="选择日期"
-              format="YYYY-MM-DD" value-format="YYYY-MM-DD" disabled></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
+     
 
       <!-- 第五行 -->
       <el-row :gutter="20">
@@ -176,8 +158,19 @@ import {
 } from 'element-plus'
 
 import {
+  Document,
+  Menu as IconMenu,
+  Location,
+  Moon,
+  Setting,
+  Sunny,
+} from '@element-plus/icons-vue'
+
+
+import {
   darkMode,
-  toggleDark
+  toggleDark,
+  value5
 } from '../api/blackAndWhire'
 
 // 页面加载时触发
@@ -357,7 +350,7 @@ onBeforeUnmount(() => {
 
 
 // 搜索表单对象
-const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
+// const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
 
 
 const userinfo = ref({
@@ -439,7 +432,7 @@ const clear = () => {}
   gap: 30px;
   justify-content: center;
   transform: translateX(-50%);
-  background-color: rgb(255, 255, 255, 0.7);
+  background-color:none;
   padding: 8px 16px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -450,7 +443,6 @@ const clear = () => {}
 }
 
 .dark-mode .nav {
-  background-color: rgb(0, 0, 0, 0.7);
   transition: all 1.5s ease;
 }
 
@@ -493,11 +485,20 @@ const clear = () => {}
 .change {
   position: absolute;
   top: 24%;
-  right: 19.5%;
-  width: 150px;
-  height: 44px;
-  border-radius: 10px;
-  transition: all 1.5s ease;
+  right: 24.5%;
+  transition: all 1.3s ease;
+
+}
+/* 添加自定义切换动画速度 */
+.change :deep(.el-switch__core) {
+  transition-duration: 0.6s; /* 调整为您想要的速度，例如 0.2s */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.change :deep(.el-switch__action) {
+  transition-duration: 0.6s; /* 保持与核心元素一致 */
+  border: 1px solid rgba(0, 0, 0, 0.5);
+
 }
 .list{
   margin-top: 140px; 

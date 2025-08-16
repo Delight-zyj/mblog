@@ -13,7 +13,7 @@
         <router-link to="/" class="nav-link">博客</router-link>
       </nav>
 
-      <!-- 控制按钮 -->
+      <!-- 深色模式控制按钮 -->
        <el-switch  @click="toggleDark" v-model="value5" class="change" width="" size="large" inline-prompt active-text="" inactive-text="" 
        :active-action-icon="Moon" :inactive-action-icon="Sunny"
         style="--el-switch-on-color: #000;  "
@@ -39,45 +39,33 @@
         <el-input style="width: 235px; margin-bottom: 10px;" v-model="searchDigita.digitalname" placeholder="请输入型号" clearable />
       </el-form-item>
       <el-form-item label="类型">
-  
-        <el-select style="width: 235px; margin-bottom: 10px; border-radius: 20px !important;" v-model="searchDigita.type" placeholder="请选择类型" placement="right-start" clearable>
-          <el-option label="手机" value="1" />
-          <el-option label="平板" value="2" />
+        <div class="digital-type">
+          <el-select @change="brandListLoad(searchDigita.typeid)" style="width: 220px; margin-bottom: 10px; border-radius: 20px !important;"  v-model="searchDigita.typeid" placeholder="请选择类型" placement="right-start" :teleported="false" clearable>
+            <el-option v-for="type in typeList" :key="type.typeid" :label="type.typename" :value="type.typeid"></el-option>
         </el-select>
+        </div>
+        
       </el-form-item>
       <el-form-item label="品牌">
-        <el-select style="width: 235px; color: #000;" v-model="searchDigita.digitalbrand" placeholder="请选择品牌" placement="right-start" clearable>
-          <el-option label="小米" value="1" />
-          <el-option label="华为" value="2" />
-          <el-option label="OPPO" value="3" />
-          <el-option label="vivo" value="4" />
-          <el-option label="苹果" value="5" />
-        </el-select>
+        <div class="digital-brand">
+          <el-select  style="width: 220px; margin-bottom: 10px; border-radius: 20px  !important; text-align: center;" v-model="searchDigita.brandid" placeholder="请选择品牌" placement="right-start" clearable>
+              <el-option  v-for="brand in brandList" :key="brand.brandid" :label="brand.brandname" :value="brand.brandid"></el-option>
+          </el-select>
+        </div>
+        
       </el-form-item>
         <el-form-item label="发布时间">
           <br/>
-        <el-date-picker class="el-date-picker" style="margin-left: -70px; width: 286px;" v-model="searchDigita.release_time" type="daterange" range-separator="到" start-placeholder="开始日期"
-          end-placeholder="结束日期" value-format="YYYY-MM-DD" />
+          <div class="el-date-picker">
+            <el-date-picker  style="margin-left: -70px; width: 244px;" v-model="searchDigita.release_time" type="daterange" range-separator="到" start-placeholder="开始日期"
+                end-placeholder="结束日期" value-format="YYYY-MM-DD" />
+          </div>      
       </el-form-item>
-   
-      
-      <el-form-item label="价格区间" style="color: black;" class="price">
+      <el-form-item label="电池容量" style="color: black;" class="price">
         <br/>
-        <!-- <div style="width: 300px; margin-left: -70px;"> -->
-           <!-- <el-input-number v-model="searchDigita.min" controls-position="right"  :precision="2" :step="100" step-strictly>
-        <template #decrease-icon><el-icon><Minus /></el-icon></template>
-        <template #increase-icon><el-icon><Plus /></el-icon></template>
-      </el-input-number>    
+        <el-input v-model="searchDigita.min" type="number" placeholder="请输入最低容量"  :precision="2" style="width: 300px; margin-left: -65px;"/>
         <br/>
-       <el-input-number v-model="searchDigita.max" controls-position="right"  :precision="2" :step="100" step-strictly>
-        <template #decrease-icon><el-icon><Minus /></el-icon></template>
-        <template #increase-icon><el-icon><Plus /></el-icon></template>
-      </el-input-number> -->
-      <el-input v-model="searchDigita.min" type="number" placeholder="请输入最低价格"  :precision="2" style="width: 310px; margin-left: -70px;"/>
-      <br/>
-      <el-input v-model="searchDigita.max" type="number" placeholder="请输入最高价格"  :precision="2" style="width: 300px; margin-left: -70px;"/>
-        <!-- </div> -->
-     
+        <el-input v-model="searchDigita.max" type="number" placeholder="请输入最高容量"  :precision="2" style="width: 300px; margin-left: -65px;"/>
       </el-form-item>
       <el-form-item>
         <el-button style="margin-left: 60px;" type="primary" @click="search1">查询</el-button>
@@ -85,52 +73,150 @@
       </el-form-item>
     </el-form>
 
-    <div class="" style="margin: 200px 30px 20px 400px; width: 1073px;">
+    <div class="digitalTable" style=" margin: 200px 30px 20px 400px; width: 1239px;">
     <el-table :data="digitalList" border style="width: 100%">
       <el-table-column type="index" prop="digitalId" label="序号" width="60" align="center" />
-      <el-table-column prop="digitalname" label="型号" width="120" align="center" />
-      <el-table-column prop="digitalbrand" label="品牌" width="60" align="center">
-         <template #default="scope">
-          <span v-if="scope.row.digitalbrand == 1">小米</span>
-          <span v-if="scope.row.digitalbrand == 2">华为</span>
-          <span v-if="scope.row.digitalbrand == 3">OPPO</span>
-          <span v-if="scope.row.digitalbrand == 4">vivo</span>
-          <span v-if="scope.row.digitalbrand == 5">苹果</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="type" label="类型" width="60" align="center">
-        <template #default="scope">
-          {{ scope.row.type == 1 ? '手机' : '平板' }}
-        </template>
-      </el-table-column>
+      <el-table-column prop="digitalname" label="型号" width="130" align="center" />
+      <el-table-column prop="brandname" label="品牌" width="60" align="center"/>
+     
+      <el-table-column prop="typename" label="类型" width="60" align="center" />
+        
       <el-table-column prop="digitalimage" label="图片" width="120" align="center">
         <template #default="scope">
-          <img :src="scope.row.image" height="40px" />
+          <div class="digitalimg">
+          <img :src="scope.row.digitalimg" height="90px" />
+          </div>
         </template>
       </el-table-column>/>
       <el-table-column prop="digitalsoc" label="处理器型号" width="120" align="center" />
-      <el-table-column prop="digitalprice" label="发售价格" width="113" align="center" />
+      <el-table-column prop="digitalprice" label="发售价格" width="163" align="center" />
       <el-table-column prop="digitalbattery" label="电池容量（mAh）" width="120" align="center" />
       <el-table-column prop="releaseTime" label="发布时间" width="120" align="center" />
       <el-table-column label="操作" align="center">
         <template #default="scope">
+          <el-button type="primary" v-if="userinfo.authorType===0" size="small" @click="select(scope.row.digitalId)">修改</el-button>
           <el-button type="primary" size="small" @click="select(scope.row.digitalId)">查看详细参数</el-button>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="操作" align="center">
-        <template #default="scope">
-          <el-button type="primary" size="small" @click="edit(scope.row.id)">编辑</el-button>
-          <el-button type="danger" size="small" @click="deleteById(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
   </div>
  
   </div>
-  <el-dialog v-model="digitalinfo" title="详细信息">
-    
+  <div class="digitalinfo">
+    <el-dialog v-model="digitalinfodialog" title="详细信息" :top="'130px'">
+    <el-form :model="digitalinfo"  ref="digital" label-width="80px">
+
+    <el-row :gutter="20">
+        <el-col :span="13">
+          <el-form-item >
+            
+              <img v-if="digitalinfo.digitalimg"  :src="digitalinfo.digitalimg" style="width: 320px; height: 320px; " class="digitalimg"/>
+              <img v-else src="@/assets/10.png" style="width: 320px; height: 320px;"/>
+            
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8">
+          <el-form-item  prop="digitalname">
+            <el-text style="font-size: 20px; font-weight: 1000;">{{ digitalinfo.digitalname }}</el-text>
+          </el-form-item>
+          <el-form-item  prop="digitalbrand">
+            <el-text>品牌：{{ digitalinfo.brandname }}</el-text>
+          </el-form-item>
+          <el-form-item  prop="digitaltype">
+            <el-text>电池：{{ digitalinfo.digitalbattery }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mAh</el-text>
+          </el-form-item>
+          <el-form-item  prop="digitaltype">
+            <el-text>处理器：{{ digitalinfo.digitalsoc }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</el-text>
+          </el-form-item>
+          <el-form-item  prop="digitaltype">
+            <el-text>价格：<br/>{{ digitalinfo.digitalprice }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</el-text>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item  prop="digitaltype">
+            <el-text>发布时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ digitalinfo.releaseTime }}</el-text>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item  prop="digitalInternet">
+            <el-text>网络规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ digitalinfo.digitalInternet }}</el-text>
+          </el-form-item>
+        </el-col>
+        
+
+        <el-col :span="5"> 
+           <el-form-item >
+            <el-text>影像参数</el-text>
+           
+          </el-form-item>
+        </el-col>
+        <el-col :span="16"> 
+           <el-form-item  prop="digitalcamera">
+             <el-text>{{ digitalinfo.digitalcamera }}</el-text>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20"> 
+          <el-col :span="5"> 
+           <el-form-item >
+            <el-text>屏幕</el-text>
+           
+          </el-form-item>
+        </el-col>
+        <el-col :span="16"> 
+           <el-form-item  prop="digitalscreen">
+             <el-text>{{ digitalinfo.digitalscreen }}</el-text>
+          </el-form-item>
+        </el-col>
+      </el-row>
+       <el-row :gutter="20"> 
+          <el-col :span="5"> 
+           <el-form-item >
+            <el-text>屏幕特性</el-text>
+           
+          </el-form-item>
+        </el-col>
+        <el-col :span="16"> 
+           <el-form-item  prop="digitalscreencharacteristics">
+             <el-text>{{ digitalinfo.digitalscreencharacteristics }}</el-text>
+          </el-form-item>
+        </el-col>
+
+           <el-col :span="5"> 
+           <el-form-item >
+            <el-text>尺寸和重量</el-text>
+           
+          </el-form-item>
+        </el-col>
+        <el-col :span="16"> 
+           <el-form-item  prop="digitalDimensionsAndWeight">
+             <el-text>{{ digitalinfo.digitalDimensionsAndWeight }}</el-text>
+          </el-form-item>
+        </el-col>
+
+         <el-col :span="5"> 
+           <el-form-item >
+            <el-text>充电规格</el-text>
+           
+          </el-form-item>
+        </el-col>
+        <el-col :span="16"> 
+           <el-form-item  prop="digitalcharge">
+             <el-text>{{ digitalinfo.digitalcharge }}</el-text>
+          </el-form-item>
+        </el-col>
+        
+
+      </el-row>
+
+    </el-form>
 
   </el-dialog>
+  </div>
+  
   <el-backtop :right="400" bottom="100" style="width: 100px ; height: 70px;">
     <div
       style="
@@ -157,7 +243,7 @@ import { useRouter } from 'vue-router'
 import one from '@/assets/1.png'
 import loginUser from '@/router/index';
 import { getUserinfoByIdApi, updateUserinfoApi } from '@/views/api/userinfo'
-import { getDigitalList,getDigitalById } from'@/views/api/digital.js'
+import { getDigitalList,getDigitalById,getDigitalBrandByTypeId,getDigitalType } from'@/views/api/digital.js'
 import {
   ElMessage,
   ElMessageBox,
@@ -186,6 +272,9 @@ import {
 // 已登录时否，获取用户信息
 onMounted(() => {
   search1()
+  typeListLoad()
+  window.addEventListener('pagehide', handlePageHide);
+
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   if (loginUser && loginUser.username) {
     loginName.value = loginUser.username;
@@ -193,7 +282,10 @@ onMounted(() => {
     getUserInfo(id.value);
   }
 })
-// 新增获取用户信息的方法
+
+const loginName = ref('');
+const router = useRouter();
+// 获取用户信息的方法
 const getUserInfo = async (id) => {
   const result = await getUserinfoByIdApi(id);
   if (result.code) {
@@ -211,12 +303,10 @@ const userinfo = ref({
 })
 
 const search1 = async () => {
- 
-  
   const result = await getDigitalList(
     searchDigita.value.digitalname,
-    searchDigita.value.digitalbrand,
-    searchDigita.value.type,
+    searchDigita.value.brandid,
+    searchDigita.value.typeid,
     searchDigita.value.begin,
     searchDigita.value.end,
     searchDigita.value.max,
@@ -230,7 +320,7 @@ const search1 = async () => {
 
 // 搜索digital对象清理
 const clear1 = () => {
-  searchDigita.value = { digitalname: '' ,digitalbrand: '',type: '',release_time: [],begin: '',end: '',max: '',min: '' }
+  searchDigita.value = { digitalname: '' ,brandid: '',typeid: '',release_time: [],begin: '',end: '',max: '',min: '' }
 }
 // 搜索userinfo对象
 const searchForm = ref({ username: '', gender: '', email:'', phone:'',authorType:'',createTime: '', updateTime: '' })
@@ -240,7 +330,7 @@ const id = ref('');
 // 数码列表数据
 const digitalList = ref([{}])
 
-const searchDigita = ref({ digitalname: '' ,digitalbrand: '',type: '',release_time: [],begin: '',end: '',max: '',min: ''})
+const searchDigita = ref({ digitalname: '' ,brandid: '',typeid: '',release_time: [],begin: '',end: '',max: '',min: ''})
 // 发布时间监听
 watch(() => { return searchDigita.value.release_time }, (newVal, oldVal) => {
   if (newVal.length == 2) {
@@ -252,26 +342,7 @@ watch(() => { return searchDigita.value.release_time }, (newVal, oldVal) => {
   }
 })
 
-const loginName = ref('');
-const router = useRouter();
-// 已登录时否，获取用户信息
-onMounted(() => {
-   if(userinfo.value ){
-      const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-      if (loginUser && loginUser.username) {
-        loginName.value = loginUser.username;
-        id.value = loginUser.id;
-        fetchUserInfo(id.value);
-      }
-  }
-})
-// 新增获取用户信息的方法
-const fetchUserInfo = async (id) => {
-  const result = await getUserinfoByIdApi(id);
-  if (result.code) {
-    userinfo.value = result.data;
-  }
-}
+
 
 // 退出登录
 const logout = async () => {
@@ -307,27 +378,51 @@ const handlePageHide = (event) => {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('pagehide', handlePageHide);
-})
+
 
 onBeforeUnmount(() => {
   window.removeEventListener('pagehide', handlePageHide);
 })
 
 
-const digitalinfo = ref(false)
-const digital = ref({})
+const digitalinfodialog = ref(false)
+const digitalinfo  = ref({
+  digitalId: '',
+  digitalname: '',
+  brandname: '',
+  typename: '',
+  digitalbattery: '',
+  digitalprice: '',
+  digitalscreen: '',
+  digitalimg: '',
+  digitalsoc: '',
+  releaseTime: '',
+  digitalcamera:''
+})
 
 const select = async (digitalId) =>{
   const result = await getDigitalById(digitalId);
   if (result.code) {
-    digital.value = result.data;
-    digitalinfo.value = true;
+    digitalinfo.value = result.data;
+    digitalinfodialog.value = true;
   }
 }
 
+const brandListLoad =async (typeid) => {
+  const result = await getDigitalBrandByTypeId(typeid);
+  if (result.code) {
+    brandList.value = result.data;
+  }
+}
+const typeListLoad = async () => {
+  const result = await getDigitalType();
+  if (result.code) {
+    typeList.value = result.data;
+  }
+}
 
+const typeList = ref([]);
+const brandList = ref([]);
 
 // 添加级联选择器所需的数据
 const options = ref([
@@ -470,7 +565,6 @@ const props2 = ref({
   top: 24%;
   right: 24.5%;
   transition: all 1.3s ease;
-
 }
 /* 添加自定义切换动画速度 */
 .change :deep(.el-switch__core) {
@@ -588,8 +682,14 @@ const props2 = ref({
   margin: 200px 0 0 5%;
   background-color: none;
   padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 25px;
+
   /* border-radius: 10px; */
 
+}
+.dark-mode .el-form-1{
+  border: 1px solid rgb(255, 255, 255);
 }
 
 
@@ -624,28 +724,67 @@ const props2 = ref({
 
 
 
+ /* :deep(.el-select-dropdown__item ){
+  text-align: center;
+}  */
+
+
+.el-date-picker:deep(.el-range-editor.el-input__wrapper){
+  border-radius: 25px;
+  background-color: #fefefe !important;
+  transition: all 1.5s ease
+
+}
+
 .dark-mode .el-date-picker:deep(.el-range-editor.el-input__wrapper) {
-  background-color: #864747 !important;
-  border-radius: 25px;
+  background-color: #000000 !important;
+  transition: all 1.5s ease
+
 }
 
-:deep(.dark-mode.el-range-editor.el-input__wrapper) {
-  background-color: #864747 !important;
-  border-radius: 25px;
+.digitalTable:deep(.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf){
+  background-color: #ffffff;
+  transition: all 1.5s ease
+
 }
- /* .dark-mode .el-date-picker :deep( .el-range-editor) {
-  background-color: #864747 !important;
-  border-radius: 25px;
+.dark-mode .digitalTable:deep(.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf){
+  background-color: #060606;
+  transition: all 1.5s ease
 
-} */
-/* :deep(.el-range-editor.el-input__wrapper) {
-  background-color: #864747 !important;
-  border-radius: 25px;
-} */
+}
+.digitalTable:deep(.el-table--border th.el-table__cell ){
+  background-color: #ffffff;
+  transition: all 1.5s ease;
+}
+.dark-mode .digitalTable:deep(.el-table--border th.el-table__cell ){
+  background-color: #000000;
+  transition: all 1.5s ease;
+}
 
+:deep(.el-table tr){
+  border-radius: 25px 25px 0 0;
+  background-color: #000000;
+}
+ .digitalinfo:deep(.el-dialog){
+  background-color: #ffffff;
+  transition: all 1.5s ease;
+  border-radius: 25px ;
+  border: 1px solid rgb(0, 0, 0);
 
+}
+.dark-mode .digitalinfo:deep(.el-dialog){
+  background-color: #000000;
+  transition: all 1.5s ease;
+  border-radius: 25px ;
+  border: 1px solid rgb(255, 255, 255);
 
+}
 
+.dark-mode.digitalimg{
+  background-color: #000000;
+  transition: all 1.5s ease;
+
+}
 
 </style> 
 

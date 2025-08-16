@@ -133,7 +133,6 @@ const id = ref('');
 
 
 const loginName = ref('');
-const avatar = ref('');
 const router = useRouter();
 // 钩子函数(获取用户名信息)
 onMounted(() => {

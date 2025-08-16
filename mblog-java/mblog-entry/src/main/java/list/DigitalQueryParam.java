@@ -14,17 +14,17 @@ public class DigitalQueryParam {
 
     private String digitalname;
 
-    private String digitalbrand;
+    private Integer brandid;
 
-    private Integer type;
+    private Integer typeid;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate begin;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate end;
 
-    private double max;
-    private double min;
+    private Double max;
+    private Double min;
 
 
 }

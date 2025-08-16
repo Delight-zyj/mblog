@@ -4,25 +4,86 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mblog.mapper.DigitalMapper">
 
+    <select id="selectAll" resultType="list.DigitalList">
+#         SELECT
+#         a.digitalId,
+#         a.digitalname,
+#         a.digitalimg,
+#         a.digitalsoc,
+#         a.release_time,
+#         a.digitalprice,
+#         a.digitalscreen,
+#         a.digitalbattery,
+#         a.digitalcamera,
+#         b.typename,
+#         c.brandname
 
-    <select id="selectAll" resultType="com.mblog.entry.Digital">
-        select digitalId, digitalname, digitalbrand, digitalimg, digitalsoc, release_time, digitalprice, digitalscreen, digitalbattery, digitalcamera, type from phone
+        SELECT
+        a.digitalId,
+        a.digitalname,
+        a.digitalimg,
+        a.digitalsoc,
+        a.release_time,
+        a.digitalprice,
+#         a.digitalscreen,
+        a.digitalbattery,
+#         a.digitalcamera,
+        b.typename,
+        c.brandname
+        FROM digital a
+        LEFT JOIN digital_type b ON a.typeid = b.typeid
+        LEFT JOIN digital_brand c ON a.brandid = c.brandid
         <where>
+            <!-- 数码型号模糊查询 -->
             <if test="digitalname != null and digitalname != ''">
-                phone.digitalname like concat('%',#{digitalname},'%')
+                AND a.digitalname LIKE CONCAT('%', #{digitalname}, '%')
             </if>
-            <if test="digitalbrand != null and digitalbrand != ''">
-                and phone.digitalbrand = #{digitalbrand}
+
+            <!-- 类型筛选 -->
+            <if test="typeid != null">
+                AND a.typeid = b.typeid AND a.typeid = #{typeid}
             </if>
-            <if test="type != null">
-                and phone.type = #{type}
+
+            <!-- 品牌筛选 -->
+            <if test="brandid != null">
+                AND a.brandid = c.brandid AND a.brandid = #{brandid}
             </if>
+
+            <!-- 发布时间范围 -->
             <if test="begin != null and end != null">
-                and phone.release_time between #{begin} and #{end}
+                AND a.release_time BETWEEN #{begin} AND #{end}
             </if>
-            <if test="max != 0.0 and min != 0.0">
-                and phone.digitalprice between #{min} and #{max}
+
+            <!-- 价格区间 -->
+            <if test="max != null and min != null">
+                AND a.digitalbattery BETWEEN #{min} AND #{max}
             </if>
         </where>
+    </select>
+    <select id="getType" resultType="com.mblog.entry.DigitalType">
+        select typeid,typename from digital_type
+    </select>
+    <select id="getById" resultType="list.DigitalList">
+        select a.digitalId,
+               a.digitalname,
+               a.digitalimg,
+               a.digitalsoc,
+               a.release_time,
+               a.digitalprice,
+               a.digitalscreen,
+               a.digitalbattery,
+               a.digitalcamera,
+               b.typename,
+               c.brandname,
+               a.digitalDimensionsAndWeight,
+               a.digitalcharge,
+               a.digitalInternet,
+               a.digitalscreencharacteristics
+        from digital a,
+             digital_type b,
+             digital_brand c
+        where a.brandid = c.brandid
+          and a.typeid = b.typeid
+          and a.digitalId = #{digitalId}
     </select>
 </mapper>

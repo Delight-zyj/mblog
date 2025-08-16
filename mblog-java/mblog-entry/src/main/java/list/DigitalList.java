@@ -1,4 +1,4 @@
-package com.mblog.entry;
+package list;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +9,11 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Digital {
+public class DigitalList {
 
     private int digitalId;
 
     private String digitalname;
-
-     private String brandid;
 
     private String digitalimg;
 
@@ -31,5 +29,15 @@ public class Digital {
 
     private String digitalcamera;
 
-    private int typeid; // 与数据库字段对应
+    private String brandname;
+
+    private String typename;
+
+    private String digitalDimensionsAndWeight;
+
+    private String digitalcharge;
+
+    private String digitalInternet;
+
+    private String digitalscreencharacteristics;
 }
