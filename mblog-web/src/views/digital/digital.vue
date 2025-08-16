@@ -2,7 +2,11 @@
   <div class="home">
     <div class="container">
       <!-- Logo -->
+       <button style="background: none; border: none;">
       <img src="../../assets/logo.png" alt="logo" class="logo" />
+      <audio ref="audioPlayer" :src="audioSrc"></audio>
+        
+       </button>
 
       <!-- 导航栏 -->
       <nav class="nav">
